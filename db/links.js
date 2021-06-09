@@ -3,7 +3,7 @@ const {
     // other db methods 
   } = require('./index');
 
-const createLinks = async ({name, link, createDate, comment}) => {
+const createLink = async ({name, link, createDate, comment}) => {
     try {
         const {
             rows: [links],
@@ -19,11 +19,9 @@ const createLinks = async ({name, link, createDate, comment}) => {
 
           return links;
     } catch (err) {
-        console.error("Could not create links in links.js [createLinks()]")
+        console.error("Could not create links in links.js [createLink()]")
         throw err
     }
 }
 
-module.exports = {
-  createLinks
-}
+module.exports = createLink
