@@ -7,6 +7,11 @@ const {
 async function buildTables() {
   try {
     client.connect();
+        // drop tables in correct order
+        client.query(`
+        DROP TABLE IF EXISTS tags;
+        DROP TABLE IF EXISTS links;
+      `);
 
     // drop tables in correct order
     client.query(`
