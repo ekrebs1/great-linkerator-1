@@ -11,15 +11,19 @@ const createLinks = async ({name, link, createDate, comment}) => {
             `
               INSERT INTO links(name, link, "createDate", comment)
               VALUES($1, $2, $3, $4)
-              ON CONFLICT (name, link) DO NOTHING
+              ON CONFLICT (name) DO NOTHING
               RETURNING *;
            `,
-            [username, hashedPassword]
+            [name, link, createDate, comment]
           );
-          delete user.password;
-          return user;
+
+          return links;
     } catch (err) {
         console.error("Could not create links in links.js [createLinks()]")
         throw err
     }
+}
+
+module.exports = {
+  createLinks
 }
