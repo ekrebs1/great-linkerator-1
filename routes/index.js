@@ -1,5 +1,5 @@
 const apiRouter = require('express').Router();
-const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName} = require('../db/index')
+const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById} = require('../db/index')
 
 apiRouter.get("/", (_, res, __) => {
   res.send({
@@ -26,7 +26,7 @@ apiRouter.post("/links", async (req, res, next) => {
   const linkData = {};
 
   if (tagArr.length) {
-    postData.tags = tagArr;
+    linkData.tags = tagArr;
   }
 
   try {
@@ -50,6 +50,36 @@ apiRouter.post("/links", async (req, res, next) => {
       message: "Link successfully created!",
       newLink,
     });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
+apiRouter.patch("/:linkId", requireUser, async (req, res, next) => {
+  const { linkId } = req.params;
+  const { name, link, comment, tags } = req.body;
+
+  const updateFields = {};
+
+  if (tags && tags.length > 0) {
+    updateFields.tags = tags.trim().split(/\s+/);
+  }
+
+  if (name) {
+    updateFields.name = name;
+  }
+
+  if (link) {
+    updateFields.link = link;
+  }
+
+  if (comment) {
+    updateFields.comment = comment;
+  }
+
+  try {
+      const updatedLink = await updateLink(linkId, updateFields);
+      res.send({ link: updatedLink });
   } catch ({ name, message }) {
     next({ name, message });
   }
