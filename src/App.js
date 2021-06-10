@@ -1,14 +1,16 @@
 import React from "react";
+import AddLink from "./components/AddLink";
 import Links from "./components/Links";
 import Tags from "./components/Tags";
-
+import NavBar from "./components/NavBar"
 const App = () => {
   return (
     <div className='App'>
       <header>
-        <h1>~nav bar~</h1>
+        <NavBar />
       </header>
-      <main>
+      <main style={{ marginTop: "100px" }}>
+        <AddLink />
         <Links />
       </main>
       <footer>
