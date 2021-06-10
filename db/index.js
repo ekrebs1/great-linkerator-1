@@ -181,7 +181,7 @@ async function createLinkTag(linkId, tagId) {
   }
 }
 
-async function addTagsToLink(linkId, tagList) {
+async function addTagsToLink(linkId, tagList=[]) {
   try {
     const createLinkTagPromises = tagList.map(
       tag => createLinkTag(linkId, tag.id)

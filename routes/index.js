@@ -55,7 +55,7 @@ apiRouter.post("/links", async (req, res, next) => {
   }
 });
 
-apiRouter.patch("/:linkId", requireUser, async (req, res, next) => {
+apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
   const { name, link, comment, tags } = req.body;
 
