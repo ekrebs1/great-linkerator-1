@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { getLinks } from "../api";
-import { makeStyles } from "@material-ui/core/styles";
+// import Tags from "./Tags";
 import clsx from "clsx";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Collapse,
+  Avatar,
+  IconButton,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
+    paddingTop: "40.25%", // 16:9
   },
   expand: {
     transform: "rotate(0deg)",
@@ -52,9 +55,9 @@ const Links = () => {
 
   useEffect(() => {
     getLinks()
-      .then(response  => {
+      .then((response) => {
         setLinks(response.links); // should this be response or response.links?!?!
-        console.log(response.links)
+        console.log(response.links);
       })
       .catch((error) => {
         setMessage(error.message);
@@ -62,62 +65,72 @@ const Links = () => {
   }, []);
 
   return (
-      
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            🔗
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title="{link.name}"
-        subheader="{link.createDate}"
-      />
-      <CardMedia
-        className={classes.media}
-        image="{og.image}"
-        title="link preview"
-      />
-      <CardContent>
-        <Typography variant="body1" color="textSecondary" component="p">
-         link.clickNum
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-         link.comment
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Tags:</Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-         link.tags
-        </Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
+    <>
+      {links &&
+        links.map((link) => {
+          return (
+            <Card direction="row" className={classes.root}>
+              <CardHeader
+                avatar={
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    🔗
+                  </Avatar>
+                }
+                action={
+                  <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={link.name}
+                subheader={link.createDate}
+              />
+              <CardMedia
+                className={classes.media}
+                image=""
+                title="link preview"
+              />
+              <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  Click count: {link.clickNum}
+                </Typography>
+                <Typography variant="body1" color="textSecondary" component="p">
+                  {link.comment}
+                </Typography>
+              </CardContent>
+              <CardActions disableSpacing>
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share">
+                  <ShareIcon />
+                </IconButton>
+                <IconButton
+                  className={clsx(classes.expand, {
+                    [classes.expandOpen]: expanded,
+                  })}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ExpandMoreIcon />
+                </IconButton>
+              </CardActions>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                  <Typography paragraph>Tags:</Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {/* <Tags /> */}
+                  </Typography>
+                </CardContent>
+              </Collapse>
+            </Card>
+          );
+        })}
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { Links, Tags } from "./components";
+import Links from "./components/Links";
+import Tags from "./components/Tags";
 
 const App = () => {
   return (
@@ -11,7 +12,7 @@ const App = () => {
         <Links />
       </main>
       <footer>
-        <Tags />
+        {/* <Tags /> */}
       </footer>
     </div>
   );
