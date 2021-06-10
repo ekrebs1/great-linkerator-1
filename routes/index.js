@@ -25,9 +25,9 @@ apiRouter.post("/links", async (req, res, next) => {
   const tagArr = tags.trim().split(/\s+/);
   const linkData = {};
 
-  if (tagArr.length) {
-    postData.tags = tagArr;
-  }
+  // if (tagArr.length) {
+  //   postData.tags = tagArr;
+  // }
 
   try {
     linkData.name = name;
