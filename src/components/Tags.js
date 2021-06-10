@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getTags } from "./api";
+import { getTags } from "../api";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Chip, Paper } from "@material-ui/core/Chip";
+import { Chip, Paper } from "@material-ui/core";
 
 const Tags = () => {
   const [tags, setTags] = useState();
