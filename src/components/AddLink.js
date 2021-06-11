@@ -35,6 +35,7 @@ const AddLink = () => {
   const [link, setLink] = useState("");
   const [comment, setComment] = useState("");
   const [createDate, setCreateDate] = useState("");
+  const [tags, setTags] = useState("");
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
@@ -48,7 +49,7 @@ const AddLink = () => {
 
   const handleCreateLink = (event) => {
     event.preventDefault();
-    createLinks(name, link, createDate, comment);
+    createLinks(name, link, createDate, comment, tags);
   };
 
   const body = (
@@ -87,6 +88,14 @@ const AddLink = () => {
           value={createDate}
           onInput={(event) => {
             setCreateDate(event.target.value);
+          }}
+        />
+        <TextField
+          type="text"
+          label="tags"
+          value={tags}
+          onInput={(event) => {
+            setTags(event.target.value);
           }}
         />
         <Button type="submit">Submit</Button>
