@@ -15,8 +15,8 @@ apiRouter.get("/links", async (_, res, __) => {
   
   res.send({
     links: links
-  });} catch (err) {
-    throw err
+  })} catch ({ name, message }) {
+    next({ name: "LinkGetError", message: "Unable to get links!" });
   }
 });
 
@@ -51,7 +51,7 @@ apiRouter.post("/links", async (req, res, next) => {
       newLink,
     });
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkCreateError", message: "Unable to create new link!" });
   }
 });
 
@@ -81,7 +81,7 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
       const updatedLink = await updateLink(linkId, updateFields);
       res.send({ link: updatedLink });
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
 });
 
@@ -93,8 +93,8 @@ apiRouter.get("/tags", async (_, res, next) => {
   
   res.send({
     tags: tags
-  });} catch (err) {
-    next(err)
+  });} catch ({ name, message }) {
+    next({ name: "TagGetError", message: "Unable to get tags!" });
   }
 });
 
@@ -106,7 +106,7 @@ apiRouter.post("/tags", async (_, res, next) => {
       newTag
     })
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "TagCreateError", message: "Unable to create new tag!" });
   }
 })
 
@@ -122,8 +122,7 @@ apiRouter.get("/:tagName/links", async (req, res, next) => {
      links
     ]);
   } catch ({ name, message }) {
-    // forward the name and message to the error handler
-    next({ name, message });
+    next({ name: "LinkByTagError", message: "Unable to get links by tag!" });
   }
 });
 
@@ -137,7 +136,7 @@ apiRouter.get("/link_tags", async (_, res, next) => {
       linkTags
     })
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkTagGetError", message: "Unable to get link_tags!" });
   }
 })
 module.exports = {apiRouter};
