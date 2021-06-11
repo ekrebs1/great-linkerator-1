@@ -7,6 +7,7 @@ const {
   getAllTags,
   getLinksByTagName,
   getLinkById,
+  updateLink
 } = require("./index");
 // const createLink =  require("./links");
 
@@ -87,36 +88,11 @@ const createInitialLinks = async () => {
   }
 };
 
-// const createInitialTags = async () => {
-//   console.log("Starting to create initial tags...");
-//   try {
-//     const tagsToCreate = [
-//       {
-//         name: "search",
-//       },
-//       {
-//         name: "social",
-//       },
-//       {
-//         name: "business",
-//       },
-//     ];
-//     const tags = await Promise.all(tagsToCreate.map(createTags));
-//     console.log("Links created:");
-//     console.log(tags);
-//     console.log("Finished creating tags!");
-//   } catch (err) {
-//     console.error("There was a problem creating TAGS");
-//     throw err;
-//   }
-// };
-
 async function rebuildDB() {
   try {
     client.connect();
     await buildTables()
     await createInitialLinks()
-    // await createInitialTags()
   } catch (error) {
     throw error;
   }
@@ -126,37 +102,28 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
-    // console.log("Calling getAllUsers");
-    // const links = await getAllLinks();
-    // console.log("Result:", links);
-
-    // console.log("Calling updateUser on users[0]");
-    // const updateUserResult = await updateUser(users[0].id, {
-    //   name: "Newname Sogood",
-    //   location: "Lesterville, KY"
-    // });
-    // console.log("Result:", updateUserResult);
-
     console.log("Calling getAllLinks");
     const links = await getAllLinks();
     console.log("Result:", links);
 
-    // console.log("Calling updatePost on posts[0]");
-    // const updatePostResult = await updatePost(posts[0].id, {
-    //   title: "New Title",
-    //   content: "Updated Content"
-    // });
-    // console.log("Result:", updatePostResult);
+    console.log("Calling updateLink on links[0]");
+    const updateLinkResult = await updateLink(links[0].id, {
+      name: "Instagram",
+      link: "http://www.instagram.com",
+      comment: "Photo sharing Social Network",
+      tags: ["social", "photography"]
+    });
+    console.log("Result:", updateLinkResult);
 
     console.log("Calling getLinkById with 1");
     const linkById = await getLinkById(1);
     console.log("Result:", linkById);
 
-    // console.log("Calling updatePost on posts[1], only updating tags");
-    // const updatePostTagsResult = await updatePost(posts[1].id, {
-    // tags: ["#youcandoanything", "#redfish", "#bluefish"]
-    // });
-    // console.log("Result:", updatePostTagsResult);
+    console.log("Calling updateLink on links[1], only updating tags");
+    const updateLinkTagsResult = await updateLink(links[1].id, {
+    tags: ["social", "networking", "marketplace"]
+    });
+    console.log("Result:", updateLinkTagsResult);
 
     console.log("Calling getPostsByTagName with #social");
     const linksWithSocial = await getLinksByTagName("social");

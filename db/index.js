@@ -74,6 +74,55 @@ async function getAllLinks() {
   }
 }
 
+async function updateLink(linkId, fields = {}) {
+  // read off the tags & remove that field 
+  const { tags } = fields; // might be undefined
+  delete fields.tags;
+
+  // build the set string
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+  try {
+    // update any fields that need to be updated
+    if (setString.length > 0) {
+      await client.query(`
+        UPDATE links
+        SET ${ setString }
+        WHERE id=${ linkId }
+        RETURNING *;
+      `, Object.values(fields));
+    }
+
+    // return early if there's no tags to update
+    if (tags === undefined) {
+      return await getLinkById(linkId);
+    }
+
+    // make any new tags that need to be made
+    const tagList = await createTags(tags);
+    const tagListIdString = tagList.map(
+      tag => `${ tag.id }`
+    ).join(', ');
+
+    // delete any link_tags from the database which aren't in that tagList
+    await client.query(`
+      DELETE FROM link_tags
+      WHERE "tagId"
+      NOT IN (${ tagListIdString })
+      AND "linkId"=$1;
+    `, [linkId]);
+
+    // and create link_tags as necessary
+    await addTagsToLink(linkId, tagList);
+
+    return await getLinkById(linkId);
+  } catch (error) {
+    throw error;
+  }
+}
+
 // +++++++++++ FUNCTIONS FOR TAGS ++++++++++++ //
 
 const createTags = async (tagList) => {
@@ -120,7 +169,7 @@ const getAllTags = async () => {
 
 // +++++++++++ FUNCTIONS FOR ADDING TAGS TO LINKS ++++++++++++ //
 
-async function createPostTag(linkId, tagId) {
+async function createLinkTag(linkId, tagId) {
   try {
     await client.query(`
       INSERT INTO link_tags("linkId", "tagId")
@@ -132,10 +181,10 @@ async function createPostTag(linkId, tagId) {
   }
 }
 
-async function addTagsToLink(linkId, tagList) {
+async function addTagsToLink(linkId, tagList=[]) {
   try {
     const createLinkTagPromises = tagList.map(
-      tag => createPostTag(linkId, tag.id)
+      tag => createLinkTag(linkId, tag.id)
     );
 
     await Promise.all(createLinkTagPromises);
@@ -165,6 +214,20 @@ async function getLinksByTagName(tagName) {
   }
 } 
 
+async function getAllLinkTags() {
+  try {
+    const {rows} = await client.query(`
+      SELECT *
+      FROM link_tags;
+    `)
+
+    return rows
+  } catch (err) {
+    console.err("Could not get all link tags!")
+    throw err
+  }
+}
+
 // export
 module.exports = {
   client,
@@ -174,6 +237,8 @@ module.exports = {
   getAllTags,
   getLinkById,
   addTagsToLink,
-  getLinksByTagName
+  getLinksByTagName,
+  getAllLinkTags,
+  updateLink
 
 };
