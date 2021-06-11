@@ -18,13 +18,14 @@ export async function getTags() {
   }
 }
 
-export async function createLinks(name, link, createDate, comment) {
+export async function createLinks(name, link, createDate, comment, tags) {
   try {
     const { data } = await axios.post('/api/links', {
         name: name,
         link: link,
         createDate: createDate,
-        comment: comment
+        comment: comment,
+        tags: tags
     });
     
     console.log(data)
