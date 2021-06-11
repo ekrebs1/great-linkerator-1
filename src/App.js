@@ -2,7 +2,7 @@ import React from "react";
 import AddLink from "./components/AddLink";
 import Links from "./components/Links";
 import Tags from "./components/Tags";
-import NavBar from "./components/NavBar"
+import NavBar from "./components/NavBar";
 const App = () => {
   return (
     <div className='App'>
@@ -13,9 +13,7 @@ const App = () => {
         <AddLink />
         <Links />
       </main>
-      <footer>
-        {/* <Tags /> */}
-      </footer>
+      <footer></footer>
     </div>
   );
 };

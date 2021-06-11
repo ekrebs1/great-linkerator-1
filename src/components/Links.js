@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getLinks } from "../api";
-// import Tags from "./Tags";
+import Tags from "./Tags";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -70,15 +70,15 @@ const Links = () => {
       {links &&
         links.map((link) => {
           return (
-            <Card key={link.id} direction="row" className={classes.root}>
+            <Card key={link.id} direction='row' className={classes.root}>
               <CardHeader
                 avatar={
-                  <Avatar aria-label="recipe" className={classes.avatar}>
+                  <Avatar aria-label='recipe' className={classes.avatar}>
                     🔗
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
+                  <IconButton aria-label='settings'>
                     <MoreVertIcon />
                   </IconButton>
                 }
@@ -88,21 +88,21 @@ const Links = () => {
               <CardMedia
                 className={classes.media}
                 // image="img"
-                title="link preview"
+                title='link preview'
               />
               <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography variant='body2' color='textSecondary' component='p'>
                   Click count: {link.clickNum}
                 </Typography>
-                <Typography variant="body1" color="textSecondary" component="p">
+                <Typography variant='body1' color='textSecondary' component='p'>
                   {link.comment}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
+                <IconButton aria-label='add to favorites'>
                   <FavoriteIcon />
                 </IconButton>
-                <IconButton aria-label="share">
+                <IconButton aria-label='share'>
                   <ShareIcon />
                 </IconButton>
                 <IconButton
@@ -111,20 +111,18 @@ const Links = () => {
                   })}
                   onClick={handleExpandClick}
                   aria-expanded={expanded}
-                  aria-label="show more"
-                >
+                  aria-label='show more'>
                   <ExpandMoreIcon />
                 </IconButton>
               </CardActions>
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <Collapse in={expanded} timeout='auto' unmountOnExit>
                 <CardContent>
                   <Typography paragraph>Tags:</Typography>
                   <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {/* <Tags /> */}
+                    variant='body2'
+                    color='textSecondary'
+                    component='p'>
+                    <Tags />
                   </Typography>
                 </CardContent>
               </Collapse>
