@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import { getTags } from "../api";
+import { getLinks } from "../api";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Chip, Paper } from "@material-ui/core";
 
 const Tags = () => {
-  const [tags, setTags] = useState();
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
-    getTags().then(({ data }) => {
-      if (data.length) {
-        setTags(data);
-      }
-    });
+    getLinks()
+      .then((response) => {
+        setLinks(response.links);
+        // console.log(response.links);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   const useStyles = makeStyles((theme) => ({
@@ -33,14 +36,15 @@ const Tags = () => {
 
   return (
     <Paper component='ul' className={classes.root}>
-      {tags &&
-        tags.map((tag) => {
+      {links.map((link) => {
+        return link.tags.map((tag) => {
           return (
             <li key={tag.id}>
               <Chip label={tag.name} className={classes.chip} />
             </li>
           );
-        })}
+        });
+      })}
     </Paper>
   );
 };
