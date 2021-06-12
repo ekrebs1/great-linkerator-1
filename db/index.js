@@ -76,8 +76,7 @@ async function getAllLinks() {
 
 async function updateLink(linkId, fields = {}) {
   // read off the tags & remove that field 
-  const { tags } = fields; // might be undefined
-  delete fields.tags;
+  // const { tags } = fields; // might be undefined
 
   // build the set string
   const setString = Object.keys(fields).map(
@@ -96,26 +95,26 @@ async function updateLink(linkId, fields = {}) {
     }
 
     // return early if there's no tags to update
-    if (tags === undefined) {
-      return await getLinkById(linkId);
-    }
+    // if (tags === undefined) {
+    //   return await getLinkById(linkId);
+    // }
 
     // make any new tags that need to be made
-    const tagList = await createTags(tags);
-    const tagListIdString = tagList.map(
-      tag => `${ tag.id }`
-    ).join(', ');
+    // const tagList = await createTags(tags);
+    // const tagListIdString = tagList.map(
+    //   tag => `${ tag.id }`
+    // ).join(', ');
 
     // delete any link_tags from the database which aren't in that tagList
-    await client.query(`
-      DELETE FROM link_tags
-      WHERE "tagId"
-      NOT IN (${ tagListIdString })
-      AND "linkId"=$1;
-    `, [linkId]);
+    // await client.query(`
+    //   DELETE FROM link_tags
+    //   WHERE "tagId"
+    //   NOT IN (${ tagListIdString })
+    //   AND "linkId"=$1;
+    // `, [linkId]);
 
     // and create link_tags as necessary
-    await addTagsToLink(linkId, tagList);
+    // await addTagsToLink(linkId, tagList);
 
     return await getLinkById(linkId);
   } catch (error) {

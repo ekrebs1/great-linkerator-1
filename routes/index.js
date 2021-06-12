@@ -1,5 +1,5 @@
 const apiRouter = require('express').Router();
-const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById} = require('../db/index')
+const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById, updateLink} = require('../db/index')
 
 apiRouter.get("/", (_, res, __) => {
   res.send({
@@ -57,13 +57,14 @@ apiRouter.post("/links", async (req, res, next) => {
 
 apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { name, link, comment, tags } = req.body;
+  const { name, link, comment } = req.body;
 
   const updateFields = {};
 
-  if (tags && tags.length > 0) {
-    updateFields.tags = tags.trim().split(/\s+/);
-  }
+  // if (tags && tags.length > 0) {
+  //   updateFields.tags = tags.trim().split(/\s+/);
+  // }
+  // console.log(updateFields.tags)
 
   if (name) {
     updateFields.name = name;
@@ -77,9 +78,26 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
     updateFields.comment = comment;
   }
 
+  console.log()
+
   try {
       const updatedLink = await updateLink(linkId, updateFields);
-      res.send({ link: updatedLink });
+      res.send({updatedLink});
+  } catch ({ name, message }) {
+    next({ name: "LinkUpdateError", message: "Unable to update link info!" });
+  }
+});
+
+apiRouter.delete("/:linkId", async (req, res, next) => {
+    try {
+      const link = await getLinkById(req.params.linkId);
+      if (link.active) {
+        const updatedLink = await updateLink(link.id, {active: false});
+        res.send({ link: updatedLink });
+      } else {
+        res.send({name: "LinkInactiveError", message: "This link is already deleted!"})
+      }
+        
   } catch ({ name, message }) {
     next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
