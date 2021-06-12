@@ -17,7 +17,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Box from "@material-ui/core/Box";
+import AddLink from "./AddLink";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,8 +65,11 @@ const Links = () => {
       });
   }, []);
 
+  //write a teardown function for deleting links
+
   return (
     <div style={{ marginTop: "50px" }}>
+    <AddLink setLinks={setLinks} />
       {links &&
         links.map((link) => {
           return (
@@ -87,7 +90,7 @@ const Links = () => {
               />
               <CardMedia
                 className={classes.media}
-                // image="img"
+                image="img"
                 title='link preview'
               />
               <CardContent>
