@@ -31,7 +31,7 @@ async function buildTables() {
         "createDate" DATE NOT NULL,
         "clickNum" INTEGER,
         comment VARCHAR(255) NOT NULL,
-        active BOOLEAN DEFAULT true
+        active boolean DEFAULT true
         
       );
        CREATE TABLE tags(
@@ -111,7 +111,8 @@ async function testDB() {
     const updateLinkResult = await updateLink(links[0].id, {
       name: "Instagram",
       link: "http://www.instagram.com",
-      comment: "Photo sharing Social Network"
+      comment: "Photo sharing Social Network",
+      tags: ["social", "photography"]
     });
     console.log("Result:", updateLinkResult);
 
@@ -119,11 +120,11 @@ async function testDB() {
     const linkById = await getLinkById(1);
     console.log("Result:", linkById);
 
-    // console.log("Calling updateLink on links[1], only updating tags");
-    // const updateLinkTagsResult = await updateLink(links[1].id, {
-    // tags: ["social", "networking", "marketplace"]
-    // });
-    // console.log("Result:", updateLinkTagsResult);
+    console.log("Calling updateLink on links[1], only updating tags");
+    const updateLinkTagsResult = await updateLink(links[1].id, {
+    tags: ["social", "networking", "marketplace"]
+    });
+    console.log("Result:", updateLinkTagsResult);
 
     console.log("Calling getPostsByTagName with #social");
     const linksWithSocial = await getLinksByTagName("social");

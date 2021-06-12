@@ -57,14 +57,14 @@ apiRouter.post("/links", async (req, res, next) => {
 
 apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { name, link, comment } = req.body;
+  const { name, link, comment, tags } = req.body;
 
   const updateFields = {};
 
-  // if (tags && tags.length > 0) {
-  //   updateFields.tags = tags.trim().split(/\s+/);
-  // }
-  // console.log(updateFields.tags)
+  if (tags && tags.length > 0) {
+    updateFields.tags = tags.trim().split(/\s+/);
+  }
+  console.log(updateFields.tags)
 
   if (name) {
     updateFields.name = name;
@@ -77,8 +77,6 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
   if (comment) {
     updateFields.comment = comment;
   }
-
-  console.log()
 
   try {
       const updatedLink = await updateLink(linkId, updateFields);

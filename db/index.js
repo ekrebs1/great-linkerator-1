@@ -7,7 +7,14 @@ const client = new Client(DB_URL);
 
 // +++++++++++ FUNCTIONS FOR LINKS ++++++++++++ //
 
-const createLink = async ({ name, link, createDate, clickNum, comment, tags = [] }) => {
+const createLink = async ({
+  name,
+  link,
+  createDate,
+  clickNum,
+  comment,
+  tags = [],
+}) => {
   try {
     const {
       rows: [links],
@@ -20,9 +27,8 @@ const createLink = async ({ name, link, createDate, clickNum, comment, tags = []
          `,
       [name, link, createDate, clickNum, comment]
     );
-      const tagList = await createTags(tags)
-      return await addTagsToLink(links.id, tagList);
-
+    const tagList = await createTags(tags);
+    return await addTagsToLink(links.id, tagList);
   } catch (err) {
     console.error("Could not create links in index.js [createLink()]");
     throw err;
@@ -40,20 +46,23 @@ async function getLinkById(linkId) {
       `);
 
     if (!link) {
-      throw {name: "LinkNotFoundError",
-      message: "Could not find a link with that linkId"}
+      throw {
+        name: "LinkNotFoundError",
+        message: "Could not find a link with that linkId",
+      };
     }
 
-    const { rows: tags } = await client.query(`
+    const { rows: tags } = await client.query(
+      `
       SELECT tags.*
       FROM tags
       JOIN link_tags ON tags.id=link_tags."tagId"
       WHERE link_tags."linkId"=$1;
-    `, [linkId])
+    `,
+      [linkId]
+    );
     link.tags = tags;
-    return link
-    
-
+    return link;
   } catch (error) {
     throw error;
   }
@@ -75,46 +84,49 @@ async function getAllLinks() {
 }
 
 async function updateLink(linkId, fields = {}) {
-  // read off the tags & remove that field 
-  // const { tags } = fields; // might be undefined
-
+  // read off the tags & remove that field
+  const { tags } = fields; // might be undefined
+  delete fields.tags;
   // build the set string
-  const setString = Object.keys(fields).map(
-    (key, index) => `"${ key }"=$${ index + 1 }`
-  ).join(', ');
-
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
   try {
     // update any fields that need to be updated
     if (setString.length > 0) {
-      await client.query(`
+      await client.query(
+        `
         UPDATE links
-        SET ${ setString }
-        WHERE id=${ linkId }
+        SET ${setString}
+        WHERE id=${linkId}
         RETURNING *;
-      `, Object.values(fields));
+      `,
+        Object.values(fields)
+      );
     }
 
     // return early if there's no tags to update
-    // if (tags === undefined) {
-    //   return await getLinkById(linkId);
-    // }
+    if (tags === undefined) {
+      return await getLinkById(linkId);
+    }
 
     // make any new tags that need to be made
-    // const tagList = await createTags(tags);
-    // const tagListIdString = tagList.map(
-    //   tag => `${ tag.id }`
-    // ).join(', ');
+    const tagList = await createTags(tags);
+    const tagListIdString = tagList.map((tag) => `${tag.id}`).join(", ");
 
     // delete any link_tags from the database which aren't in that tagList
-    // await client.query(`
-    //   DELETE FROM link_tags
-    //   WHERE "tagId"
-    //   NOT IN (${ tagListIdString })
-    //   AND "linkId"=$1;
-    // `, [linkId]);
+    await client.query(
+      `
+      DELETE FROM link_tags
+      WHERE "tagId"
+      NOT IN (${tagListIdString})
+      AND "linkId"=$1;
+    `,
+      [linkId]
+    );
 
     // and create link_tags as necessary
-    // await addTagsToLink(linkId, tagList);
+    await addTagsToLink(linkId, tagList);
 
     return await getLinkById(linkId);
   } catch (error) {
@@ -138,16 +150,20 @@ const createTags = async (tagList) => {
         INSERT INTO tags(name)
         VALUES(${insertValues})
         ON CONFLICT (name) DO NOTHING
-     `, tagList);
+     `,
+      tagList
+    );
 
-     const { rows } = await client.query (`
+    const { rows } = await client.query(
+      `
      SELECT * FROM tags
      WHERE name
      IN (${selectValues});
-     `, tagList)
+     `,
+      tagList
+    );
 
-     return rows
-
+    return rows;
   } catch (err) {
     console.error("Could not create tags in index.js [createTag()]");
   }
@@ -170,20 +186,23 @@ const getAllTags = async () => {
 
 async function createLinkTag(linkId, tagId) {
   try {
-    await client.query(`
+    await client.query(
+      `
       INSERT INTO link_tags("linkId", "tagId")
       VALUES ($1, $2)
       ON CONFLICT ("linkId", "tagId") DO NOTHING;
-    `, [linkId, tagId]);
+    `,
+      [linkId, tagId]
+    );
   } catch (error) {
     throw error;
   }
 }
 
-async function addTagsToLink(linkId, tagList=[]) {
+async function addTagsToLink(linkId, tagList = []) {
   try {
-    const createLinkTagPromises = tagList.map(
-      tag => createLinkTag(linkId, tag.id)
+    const createLinkTagPromises = tagList.map((tag) =>
+      createLinkTag(linkId, tag.id)
     );
 
     await Promise.all(createLinkTagPromises);
@@ -194,36 +213,36 @@ async function addTagsToLink(linkId, tagList=[]) {
   }
 }
 
-
 async function getLinksByTagName(tagName) {
   try {
-    const { rows: linkIds } = await client.query(`
+    const { rows: linkIds } = await client.query(
+      `
       SELECT links.id
       FROM links
       JOIN link_tags ON links.id=link_tags."linkId"
       JOIN tags ON tags.id=link_tags."tagId"
       WHERE tags.name=$1;
-    `, [tagName]);
+    `,
+      [tagName]
+    );
 
-    return await Promise.all(linkIds.map(
-      link => getLinkById(link.id)
-    ));
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
   } catch (error) {
     throw error;
   }
-} 
+}
 
 async function getAllLinkTags() {
   try {
-    const {rows} = await client.query(`
+    const { rows } = await client.query(`
       SELECT *
       FROM link_tags;
-    `)
+    `);
 
-    return rows
+    return rows;
   } catch (err) {
-    console.err("Could not get all link tags!")
-    throw err
+    console.err("Could not get all link tags!");
+    throw err;
   }
 }
 
@@ -238,6 +257,5 @@ module.exports = {
   addTagsToLink,
   getLinksByTagName,
   getAllLinkTags,
-  updateLink
-
+  updateLink,
 };
