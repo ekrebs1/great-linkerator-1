@@ -1,5 +1,5 @@
 const apiRouter = require('express').Router();
-const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById} = require('../db/index')
+const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById, updateLink} = require('../db/index')
 
 apiRouter.get("/", (_, res, __) => {
   res.send({
@@ -15,8 +15,8 @@ apiRouter.get("/links", async (_, res, __) => {
   
   res.send({
     links: links
-  });} catch (err) {
-    throw err
+  })} catch ({ name, message }) {
+    next({ name: "LinkGetError", message: "Unable to get links!" });
   }
 });
 
@@ -51,19 +51,20 @@ apiRouter.post("/links", async (req, res, next) => {
       newLink,
     });
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkCreateError", message: "Unable to create new link!" });
   }
 });
 
 apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { name, link, comment, tags } = req.body;
+  const { name, link, comment } = req.body;
 
   const updateFields = {};
 
-  if (tags && tags.length > 0) {
-    updateFields.tags = tags.trim().split(/\s+/);
-  }
+  // if (tags && tags.length > 0) {
+  //   updateFields.tags = tags.trim().split(/\s+/);
+  // }
+  // console.log(updateFields.tags)
 
   if (name) {
     updateFields.name = name;
@@ -77,11 +78,28 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
     updateFields.comment = comment;
   }
 
+  console.log()
+
   try {
       const updatedLink = await updateLink(linkId, updateFields);
-      res.send({ link: updatedLink });
+      res.send({updatedLink});
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkUpdateError", message: "Unable to update link info!" });
+  }
+});
+
+apiRouter.delete("/:linkId", async (req, res, next) => {
+    try {
+      const link = await getLinkById(req.params.linkId);
+      if (link.active) {
+        const updatedLink = await updateLink(link.id, {active: false});
+        res.send({ link: updatedLink });
+      } else {
+        res.send({name: "LinkInactiveError", message: "This link is already deleted!"})
+      }
+        
+  } catch ({ name, message }) {
+    next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
 });
 
@@ -93,8 +111,8 @@ apiRouter.get("/tags", async (_, res, next) => {
   
   res.send({
     tags: tags
-  });} catch (err) {
-    next(err)
+  });} catch ({ name, message }) {
+    next({ name: "TagGetError", message: "Unable to get tags!" });
   }
 });
 
@@ -106,7 +124,7 @@ apiRouter.post("/tags", async (_, res, next) => {
       newTag
     })
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "TagCreateError", message: "Unable to create new tag!" });
   }
 })
 
@@ -122,8 +140,7 @@ apiRouter.get("/:tagName/links", async (req, res, next) => {
      links
     ]);
   } catch ({ name, message }) {
-    // forward the name and message to the error handler
-    next({ name, message });
+    next({ name: "LinkByTagError", message: "Unable to get links by tag!" });
   }
 });
 
@@ -137,7 +154,7 @@ apiRouter.get("/link_tags", async (_, res, next) => {
       linkTags
     })
   } catch ({ name, message }) {
-    next({ name, message });
+    next({ name: "LinkTagGetError", message: "Unable to get link_tags!" });
   }
 })
 module.exports = {apiRouter};
