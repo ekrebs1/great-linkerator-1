@@ -18,6 +18,15 @@ export async function getTags() {
   }
 }
 
+export async function getLinkTags() {
+  try {
+    const { data } = await axios.get('/api/link_tags');
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createLinks(name, link, createDate, comment, tags) {
   try {
     const { data } = await axios.post('/api/links', {

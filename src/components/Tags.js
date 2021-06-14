@@ -3,6 +3,7 @@ import { getLinks } from "../api";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Chip, Paper } from "@material-ui/core";
+import TagList from "./TagList"
 
 const Tags = () => {
   const [links, setLinks] = useState([]);
@@ -37,13 +38,7 @@ const Tags = () => {
   return (
     <Paper component='ul' className={classes.root}>
       {links.map((link) => {
-        return link.tags.map((tag) => {
-          return (
-            <li key={tag.id}>
-              <Chip label={tag.name} className={classes.chip} />
-            </li>
-          );
-        });
+        return <TagList key={link.id} link={link}/>
       })}
     </Paper>
   );

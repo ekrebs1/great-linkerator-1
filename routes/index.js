@@ -1,9 +1,18 @@
-const apiRouter = require('express').Router();
-const {getAllLinks, getAllTags, createLink, createTags, getAllLinkTags, getLinksByTagName, getLinkById, updateLink} = require('../db/index')
+const apiRouter = require("express").Router();
+const {
+  getAllLinks,
+  getAllTags,
+  createLink,
+  createTags,
+  getAllLinkTags,
+  getLinksByTagName,
+  getLinkById,
+  updateLink,
+} = require("../db/index");
 
 apiRouter.get("/", (_, res, __) => {
   res.send({
-    message: "API is under construction!"
+    message: "API is under construction!",
   });
 });
 
@@ -11,11 +20,12 @@ apiRouter.get("/", (_, res, __) => {
 
 apiRouter.get("/links", async (_, res, __) => {
   try {
-    const links = await getAllLinks()
-  
-  res.send({
-    links: links
-  })} catch ({ name, message }) {
+    const links = await getAllLinks();
+
+    res.send({
+      links: links,
+    });
+  } catch ({ name, message }) {
     next({ name: "LinkGetError", message: "Unable to get links!" });
   }
 });
@@ -33,15 +43,15 @@ apiRouter.post("/links", async (req, res, next) => {
     linkData.name = name;
     linkData.link = link;
     linkData.createDate = createDate;
-    linkData.comment = comment
+    linkData.comment = comment;
     if (!name) {
-      res.send(next(console.error({message: "Must include name"})));
+      res.send(next(console.error({ message: "Must include name" })));
     }
     if (!link) {
-      res.send(next(console.error({message: "Must include link"})));
+      res.send(next(console.error({ message: "Must include link" })));
     }
     if (!comment) {
-      res.send(next(console.error({message: "Must include comment"})));
+      res.send(next(console.error({ message: "Must include comment" })));
     }
 
     const newLink = await createLink(linkData);
@@ -64,7 +74,6 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
   if (tags && tags.length > 0) {
     updateFields.tags = tags.trim().split(/\s+/);
   }
-  console.log(updateFields.tags)
 
   if (name) {
     updateFields.name = name;
@@ -79,23 +88,25 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
   }
 
   try {
-      const updatedLink = await updateLink(linkId, updateFields);
-      res.send({updatedLink});
+    const updatedLink = await updateLink(linkId, updateFields);
+    res.send({ updatedLink });
   } catch ({ name, message }) {
     next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
 });
 
 apiRouter.delete("/:linkId", async (req, res, next) => {
-    try {
-      const link = await getLinkById(req.params.linkId);
-      if (link.active) {
-        const updatedLink = await updateLink(link.id, {active: false});
-        res.send({ link: updatedLink });
-      } else {
-        res.send({name: "LinkInactiveError", message: "This link is already deleted!"})
-      }
-        
+  try {
+    const link = await getLinkById(req.params.linkId);
+    if (link.active) {
+      const updatedLink = await updateLink(link.id, { active: false });
+      res.send({ link: updatedLink });
+    } else {
+      res.send({
+        name: "LinkInactiveError",
+        message: "This link is already deleted!",
+      });
+    }
   } catch ({ name, message }) {
     next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
@@ -105,38 +116,36 @@ apiRouter.delete("/:linkId", async (req, res, next) => {
 
 apiRouter.get("/tags", async (_, res, next) => {
   try {
-    const tags = await getAllTags()
-  
-  res.send({
-    tags: tags
-  });} catch ({ name, message }) {
+    const tags = await getAllTags();
+
+    res.send({
+      tags: tags,
+    });
+  } catch ({ name, message }) {
     next({ name: "TagGetError", message: "Unable to get tags!" });
   }
 });
 
 apiRouter.post("/tags", async (_, res, next) => {
   try {
-    const newTag = await createTags()
+    const newTag = await createTags();
     res.send({
       message: "Tag successfully created!",
-      newTag
-    })
+      newTag,
+    });
   } catch ({ name, message }) {
     next({ name: "TagCreateError", message: "Unable to create new tag!" });
   }
-})
+});
 
 apiRouter.get("/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
-  console.log(req.params)
   try {
     // use our method to get posts by tag name from the db
     const links = await getLinksByTagName(tagName);
 
-    res.send([
-     links
-    ]);
+    res.send([links]);
   } catch ({ name, message }) {
     next({ name: "LinkByTagError", message: "Unable to get links by tag!" });
   }
@@ -149,10 +158,10 @@ apiRouter.get("/link_tags", async (_, res, next) => {
     const linkTags = await getAllLinkTags();
     res.send({
       message: "Link tags successfully retrieved",
-      linkTags
-    })
+      linkTags,
+    });
   } catch ({ name, message }) {
     next({ name: "LinkTagGetError", message: "Unable to get link_tags!" });
   }
-})
-module.exports = {apiRouter};
+});
+module.exports = { apiRouter };
