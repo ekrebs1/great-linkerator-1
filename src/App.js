@@ -1,6 +1,5 @@
 import React from "react";
 import Links from "./components/Links";
-import Tags from "./components/Tags";
 import NavBar from "./components/NavBar";
 const App = () => {
   return (

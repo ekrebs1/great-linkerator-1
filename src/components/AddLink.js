@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core/";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import { createLinks, getLinks } from "../api";
+import { createLinks } from "../api";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddLink = ({setLinks}) => {
+  
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
   const [comment, setComment] = useState("");
   const [createDate, setCreateDate] = useState("");
   const [tags, setTags] = useState("");
-  //const [clickCount, setClickCount] = useState(0);
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
