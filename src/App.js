@@ -46,6 +46,18 @@ const App = () => {
 
   return (
     <div className='App'>
+      {/* <AppBar className={classes.appBar} position='static'>
+        <Toolbar>
+          <Typography variant='h6' color='primary'>
+            Menu
+          </Typography>
+        </Toolbar>
+      </AppBar> */}
+      <Box className={classes.hero}>
+        <Box className={classes.boxTitle}>
+          <ReactRotatingText items={["The Linkerator"]} pause='3000' />
+        </Box>
+      </Box>
       <AppBar className={classes.appBar} position='static'>
         <Toolbar>
           <Typography variant='h6' color='primary'>
@@ -53,11 +65,6 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Box className={classes.hero}>
-        <Box className={classes.boxTitle}>
-          <ReactRotatingText items={["The Linkerator"]} pause='3000' />
-        </Box>
-      </Box>
       <Container maxWidth='lg' className={classes.linkContainer}>
         <Typography variant='h4' className={classes.linkTitle}>
           Links
