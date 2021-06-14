@@ -2,12 +2,10 @@
 const {
   client,
   createLink,
-  createTags,
   getAllLinks,
-  getAllTags,
   getLinksByTagName,
   getLinkById,
-  updateLink
+  updateLink,
 } = require("./index");
 // const createLink =  require("./links");
 
@@ -60,7 +58,7 @@ const createInitialLinks = async () => {
         createDate: "2020/08/31",
         clickNum: 12,
         comment: "A search utility tool.",
-        tags: ["search"]
+        tags: ["search"],
       },
       {
         name: "Facebook",
@@ -68,7 +66,7 @@ const createInitialLinks = async () => {
         createDate: "2021/02/14",
         clickNum: 23,
         comment: "A social media website for family and friends.",
-        tags: ["social"]
+        tags: ["social"],
       },
       {
         name: "LinkedIn",
@@ -76,7 +74,7 @@ const createInitialLinks = async () => {
         createDate: "2020/12/25",
         clickNum: 1,
         comment: "A social networking site for professional relationships",
-        tags: ["social", "business"]
+        tags: ["social", "business"],
       },
     ];
     const links = await Promise.all(linksToCreate.map(createLink));
@@ -92,8 +90,8 @@ const createInitialLinks = async () => {
 async function rebuildDB() {
   try {
     client.connect();
-    await buildTables()
-    await createInitialLinks()
+    await buildTables();
+    await createInitialLinks();
   } catch (error) {
     throw error;
   }
@@ -112,7 +110,7 @@ async function testDB() {
       name: "Instagram",
       link: "http://www.instagram.com",
       comment: "Photo sharing Social Network",
-      tags: ["social", "photography"]
+      tags: ["social", "photography"],
     });
     console.log("Result:", updateLinkResult);
 
@@ -122,7 +120,7 @@ async function testDB() {
 
     console.log("Calling updateLink on links[1], only updating tags");
     const updateLinkTagsResult = await updateLink(links[1].id, {
-    tags: ["social", "networking", "marketplace"]
+      tags: ["social", "networking", "marketplace"],
     });
     console.log("Result:", updateLinkTagsResult);
 
