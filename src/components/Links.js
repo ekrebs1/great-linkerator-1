@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getTags } from "../api";
 import AddLink from "./AddLink";
 import LinkCard from "./LinkCard";
 
 const Links = () => {
-
   const [links, setLinks] = useState([]);
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    getTags()
+      .then((response) => {
+        setTags(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div style={{ marginTop: "50px" }}>
-    <AddLink setLinks={setLinks} />
-    <LinkCard links={links} setLinks={setLinks} />
+      <br />
+      <AddLink tags={tags} setTags={setTags} setLinks={setLinks} />
+      <LinkCard
+        tags={tags}
+        setTags={setTags}
+        links={links}
+        setLinks={setLinks}
+      />
     </div>
   );
 };

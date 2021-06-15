@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getLinks } from "../api";
-import Tags from "./Tags";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -17,8 +16,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
-// import MoreVertIcon from "@material-ui/icons/MoreVert";
-
+import { Chip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,26 +36,31 @@ const useStyles = makeStyles((theme) => ({
     }),
   },
   expandOpen: {
-    transform: "rotate(180deg)",
+    transform: "rotate(0deg)",
   },
   avatar: {
     backgroundColor: blue[100],
   },
 }));
 
-
-const LinkCard = ({setLinks, links}) => {
+const LinkCard = ({ links, setLinks, tags, setTags }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const [expandedId, setExpandedId] = useState(-1);
+
+  const handleExpandClick = (idx) => {
+    setExpandedId(expandedId === idx ? -1 : idx);
+  };
+  const handleClick = () => {
+    console.log("clicked");
+  };
+  const handleDelete = () => {
+    console.log("delete");
   };
 
   useEffect(() => {
     getLinks()
       .then((response) => {
         setLinks(response.links);
-        console.log(response.links);
       })
       .catch((error) => {
         console.error(error);
@@ -67,17 +70,19 @@ const LinkCard = ({setLinks, links}) => {
   return (
     <div style={{ marginTop: "50px" }}>
       {links &&
-        links.map((link) => {
+        links.map((link, idx) => {
           return (
-            <Card key={link.id} direction='row' className={classes.root}>
+            <Card key={link.id} direction="row" className={classes.root}>
               <CardHeader
                 avatar={
-                  <Avatar aria-label='recipe' className={classes.avatar}>
-                    <span role="img" aria-label="link emoji">🔗</span>
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    <span role="img" aria-label="link emoji">
+                      🔗
+                    </span>
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label='settings'>
+                  <IconButton aria-label="settings">
                     <DeleteIcon />
                   </IconButton>
                 }
@@ -87,41 +92,60 @@ const LinkCard = ({setLinks, links}) => {
               <CardMedia
                 className={classes.media}
                 image="img"
-                title='link preview'
+                title="link preview"
               />
               <CardContent>
-                <Typography variant='body2' color='textSecondary' component='p'>
+                <Typography variant="body2" color="textSecondary" component="p">
                   Click count: {link.clickNum}
                 </Typography>
-                <Typography variant='body1' color='textSecondary' component='p'>
+                <Typography variant="body1" color="textSecondary" component="p">
                   {link.comment}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label='add to favorites'>
+                <IconButton aria-label="add to favorites">
                   <FavoriteIcon />
                 </IconButton>
-                <IconButton aria-label='share'>
+                <IconButton aria-label="share">
                   <ShareIcon />
                 </IconButton>
                 <IconButton
                   className={clsx(classes.expand, {
-                    [classes.expandOpen]: expanded,
+                    [classes.expandOpen]: expandedId,
                   })}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label='show more'>
+                  onClick={() => handleExpandClick(idx)}
+                  aria-expanded={expandedId === idx}
+                  aria-label="show more"
+                >
                   <ExpandMoreIcon />
                 </IconButton>
               </CardActions>
-              <Collapse in={expanded} timeout='auto' unmountOnExit>
+              <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
                 <CardContent>
                   <Typography paragraph>Tags:</Typography>
                   <Typography
-                    variant='body2'
-                    color='textSecondary'
-                    component='p'>
-                    <Tags />
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    {link.tags[0]
+                      ? link.tags.map((tags, idx) => {
+                          return (
+                            <div className="tags" key={idx}>
+                              <Chip
+                                color="primary"
+                                size="small"
+                                variant="outlined"
+                                className={classes.chip}
+                                key={tags.id}
+                                label={tags.name}
+                                onClick={handleClick}
+                                onDelete={handleDelete}
+                              />
+                            </div>
+                          );
+                        })
+                      : null}
                   </Typography>
                 </CardContent>
               </Collapse>
@@ -130,8 +154,6 @@ const LinkCard = ({setLinks, links}) => {
         })}
     </div>
   );
+};
 
-
-}
-
-export default LinkCard
+export default LinkCard;

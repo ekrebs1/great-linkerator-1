@@ -30,15 +30,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddLink = ({setLinks}) => {
-  
+const AddLink = ({ setLinks }) => {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
   const [comment, setComment] = useState("");
   const [createDate, setCreateDate] = useState("");
-  const [tags, setTags] = useState("");
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [tags, setTags] = useState([]);
+
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -48,14 +48,19 @@ const AddLink = ({setLinks}) => {
     setOpen(false);
   };
 
-
   const handleCreateLink = async (event) => {
     event.preventDefault();
-    const { newLink } = await createLinks(name, link, createDate, comment, tags);
-    setLinks(prevLinks => {
-      return [...prevLinks, newLink]
-    })
-    handleClose()
+    const { newLink } = await createLinks(
+      name,
+      link,
+      createDate,
+      comment,
+      tags
+    );
+    setLinks((prevLinks) => {
+      return [...prevLinks, newLink];
+    });
+    handleClose();
   };
 
   const body = (
