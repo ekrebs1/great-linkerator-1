@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,8 +7,10 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Links from "./components/Links";
-
+import Search from "./components/Search";
+import { getLinks } from "./api";
 var ReactRotatingText = require("react-rotating-text");
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -42,7 +44,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
+  const [links, setLinks] = useState([]);
   const classes = useStyles();
+
+  useEffect(() => {
+    getLinks()
+      .then((response) => {
+        setLinks(response.links);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [setLinks]);
 
   return (
     <div className='App'>
@@ -56,6 +69,7 @@ const App = () => {
       <Box className={classes.hero}>
         <Box className={classes.boxTitle}>
           <ReactRotatingText items={["The Linkerator"]} pause='3000' />
+        
         </Box>
       </Box>
       <AppBar className={classes.appBar} position='static'>
@@ -71,7 +85,8 @@ const App = () => {
         </Typography>
         <Grid container spacing={3}>
           <Grid item md={4}>
-            <Links />
+            <Search links={links} setLinks={setLinks} />
+            <Links links={links} setLinks={setLinks} />
           </Grid>
         </Grid>
       </Container>
