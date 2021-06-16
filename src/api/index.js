@@ -27,14 +27,15 @@ export async function getLinkTags() {
   }
 }
 
-export async function createLinks(name, link, createDate, comment, tags) {
+export async function createLinks(name, link, createDate, comment, tags, clickNum) {
   try {
     const { data } = await axios.post('/api/links', {
         name: name,
         link: link,
         createDate: createDate,
         comment: comment,
-        tags: tags
+        tags: tags,
+        clickNum: clickNum,
     });
     
     console.log(data)
@@ -56,7 +57,24 @@ export async function createTags() {
 export async function deleteLink(id) {
   try {
     const { data } = await axios.delete(`/api/${id}`);
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function patchLink(){
+
+}
+
+export async function updateClick(id, newClickNum){
+  try {
+    console.log(newClickNum)
+    const { data } = await axios.patch(`/api/${id}`, {
+      clickNum: newClickNum
+    });
     console.log(data)
+    return data
   } catch (error) {
     throw error
   }
