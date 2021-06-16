@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLinks } from "../api";
+import { getLinks, deleteLink } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -53,8 +53,8 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
   const handleClick = () => {
     console.log("clicked");
   };
-  const handleDelete = () => {
-    console.log("delete");
+  const handleDelete = (id) => {
+    deleteLink(id)
   };
 
   useEffect(() => {
@@ -83,7 +83,12 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
                 }
                 action={
                   <IconButton aria-label="settings">
-                    <DeleteIcon />
+                    <DeleteIcon
+                      onClick={(event) => {
+                        event.preventDefault()
+                        handleDelete(link.id)
+                      }}
+                    />
                   </IconButton>
                 }
                 title={link.name}
@@ -140,7 +145,7 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
                                 key={tags.id}
                                 label={tags.name}
                                 onClick={handleClick}
-                                onDelete={handleDelete}
+                                // onDelete={handleDelete}
                               />
                             </div>
                           );
