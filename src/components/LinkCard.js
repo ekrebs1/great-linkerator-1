@@ -6,7 +6,6 @@ import LinkCardContent from "./LinkCardContent";
 
 
 const LinkCard = ({ links, setLinks }) => {
-
   useEffect(() => {
     deleteLink()
       .then((response) => {
@@ -18,12 +17,12 @@ const LinkCard = ({ links, setLinks }) => {
   }, [setLinks]);
 
   return (
-    <div style={{ marginTop: "50px" }}>
+    <>
       {links &&
         links.map((link, idx) => {
           return <LinkCardContent setLinks={setLinks} links={links} link={link} idx={idx} />;
         })}
-    </div>
+    </>
   );
 };
 
