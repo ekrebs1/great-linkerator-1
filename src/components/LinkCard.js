@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLinks } from "../api";
+import { getLinks, deleteLinks } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -16,7 +16,10 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
+import MoreVertIcon from "@material-ui/icons/MoreVert"
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 0,
-    paddingTop: "10.25%", // 16:9 // increase after configuring img
+    paddingTop: ".25%", // 16:9 // increase after configuring img
   },
   expand: {
     transform: "rotate(0deg)",
@@ -43,10 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LinkCard = ({ links, setLinks, tags, setTags }) => {
+const LinkCard = ({ links, setLinks }) => {
   const classes = useStyles();
   const [expandedId, setExpandedId] = useState(-1);
-
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
@@ -56,9 +58,13 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
   const handleDelete = () => {
     console.log("delete");
   };
+  const handleCreate = () => {
+    console.log("Edit");
+  };
+
 
   useEffect(() => {
-    getLinks()
+    deleteLinks()
       .then((response) => {
         setLinks(response.links);
       })
@@ -82,9 +88,15 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
-                    <DeleteIcon />
-                  </IconButton>
+                  <>
+                    <IconButton aria-label="settings">
+                      <CreateIcon onClick={handleCreate} />
+                    </IconButton>
+                    <IconButton aria-label="settings">
+                      <DeleteIcon onClick={handleDelete} />
+                      </IconButton>
+
+                  </>
                 }
                 title={link.name}
                 subheader={link.createDate}
