@@ -67,7 +67,7 @@ apiRouter.post("/links", async (req, res, next) => {
 
 apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { name, link, comment, tags } = req.body;
+  const { name, link, comment, tags, clickNum } = req.body;
 
   const updateFields = {};
 
@@ -87,6 +87,10 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
     updateFields.comment = comment;
   }
 
+  if (clickNum) {
+    updateFields.clickNum = clickNum;
+  }
+
   try {
     const updatedLink = await updateLink(linkId, updateFields);
     res.send({ updatedLink });
@@ -94,6 +98,7 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
     next({ name: "LinkUpdateError", message: "Unable to update link info!" });
   }
 });
+
 
 apiRouter.delete("/:linkId", async (req, res, next) => {
   try {

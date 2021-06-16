@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLinks, deleteLink } from "../api";
+import { getLinks, deleteLink, updateClick } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -50,11 +50,15 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
-  const handleClick = () => {
-    console.log("clicked");
+  const handleClick = (id, link, clickNum) => {
+    let newClickNum = clickNum;
+    newClickNum++
+    updateClick(id, newClickNum)
+    console.log(newClickNum)
+    // window.open(link);
   };
   const handleDelete = (id) => {
-    deleteLink(id)
+    deleteLink(id);
   };
 
   useEffect(() => {
@@ -75,7 +79,15 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
             <Card key={link.id} direction="row" className={classes.root}>
               <CardHeader
                 avatar={
-                  <Avatar aria-label="recipe" className={classes.avatar}>
+                  <Avatar
+                    aria-label="recipe"
+                    style={{ cursor: "pointer" }}
+                    className={classes.avatar}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      handleClick(link.id, link.link, link.clickNum)
+                    }}
+                  >
                     <span role="img" aria-label="link emoji">
                       🔗
                     </span>
@@ -85,8 +97,8 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
                   <IconButton aria-label="settings">
                     <DeleteIcon
                       onClick={(event) => {
-                        event.preventDefault()
-                        handleDelete(link.id)
+                        event.preventDefault();
+                        handleDelete(link.id);
                       }}
                     />
                   </IconButton>
@@ -144,7 +156,7 @@ const LinkCard = ({ links, setLinks, tags, setTags }) => {
                                 className={classes.chip}
                                 key={tags.id}
                                 label={tags.name}
-                                onClick={handleClick}
+                                // onClick={handleClick}
                                 // onDelete={handleDelete}
                               />
                             </div>
