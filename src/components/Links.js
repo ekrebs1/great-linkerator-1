@@ -3,8 +3,7 @@ import { getTags } from "../api";
 import AddLink from "./AddLink";
 import LinkCard from "./LinkCard";
 
-const Links = () => {
-  const [links, setLinks] = useState([]);
+const Links = ({links, setLinks}) => {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
