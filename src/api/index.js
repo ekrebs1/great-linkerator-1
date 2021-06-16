@@ -52,3 +52,12 @@ export async function createTags() {
     throw error;
   }
 }
+
+export async function deleteLink(id) {
+  try {
+    const { data } = await axios.delete(`/api/${id}`);
+    console.log(data)
+  } catch (error) {
+    throw error
+  }
+}
