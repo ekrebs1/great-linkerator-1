@@ -18,8 +18,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert"
-
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import LinkCardContent from "./LinkCardContent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,28 +47,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LinkCard = ({ links, setLinks }) => {
-  const classes = useStyles();
-  const [expandedId, setExpandedId] = useState(-1);
-  const handleExpandClick = (idx) => {
-    setExpandedId(expandedId === idx ? -1 : idx);
-  };
-  const handleClick = (id, link, clickNum) => {
-    let newClickNum = clickNum;
-    newClickNum++
-    updateClick(id, newClickNum)
-    console.log(newClickNum)
-    // window.open(link);
-  };
-  const handleDelete = (id) => {
-    deleteLink(id);
-  };
-  const handleCreate = () => {
-    console.log("Edit");
-  };
-
-
+  
   useEffect(() => {
-    deleteLinks()
+    deleteLink()
       .then((response) => {
         setLinks(response.links);
       })
@@ -81,100 +62,7 @@ const LinkCard = ({ links, setLinks }) => {
     <div style={{ marginTop: "50px" }}>
       {links &&
         links.map((link, idx) => {
-          return (
-            <Card key={link.id} direction="row" className={classes.root}>
-              <CardHeader
-                avatar={
-                  <Avatar
-                    aria-label="recipe"
-                    style={{ cursor: "pointer" }}
-                    className={classes.avatar}
-                    onClick={(event) => {
-                      event.preventDefault()
-                      handleClick(link.id, link.link, link.clickNum)
-                    }}
-                  >
-                    <span role="img" aria-label="link emoji">
-                      🔗
-                    </span>
-                  </Avatar>
-                }
-                action={
-
-                  <IconButton aria-label="settings">
-                    <DeleteIcon
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleDelete(link.id);
-                      }}
-                    />
-                  </IconButton>
-                }
-                title={link.name}
-                subheader={link.createDate}
-              />
-              <CardMedia
-                className={classes.media}
-                image="img"
-                title="link preview"
-              />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                  Click count: {link.clickNum}
-                </Typography>
-                <Typography variant="body1" color="textSecondary" component="p">
-                  {link.comment}
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                  <ShareIcon />
-                </IconButton>
-                <IconButton
-                  className={clsx(classes.expand, {
-                    [classes.expandOpen]: expandedId,
-                  })}
-                  onClick={() => handleExpandClick(idx)}
-                  aria-expanded={expandedId === idx}
-                  aria-label="show more"
-                >
-                  <ExpandMoreIcon />
-                </IconButton>
-              </CardActions>
-              <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
-                <CardContent>
-                  <Typography paragraph>Tags:</Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {link.tags[0]
-                      ? link.tags.map((tags, idx) => {
-                          return (
-                            <div className="tags" key={idx}>
-                              <Chip
-                                color="primary"
-                                size="small"
-                                variant="outlined"
-                                className={classes.chip}
-                                key={tags.id}
-                                label={tags.name}
-                                // onClick={handleClick}
-                                // onDelete={handleDelete}
-                              />
-                            </div>
-                          );
-                        })
-                      : null}
-                  </Typography>
-                </CardContent>
-              </Collapse>
-            </Card>
-          );
+          return <LinkCardContent link={link} idx={idx} />;
         })}
     </div>
   );

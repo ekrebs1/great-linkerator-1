@@ -69,9 +69,11 @@ export async function patchLink(){
 
 export async function updateClick(id, newClickNum){
   try {
+    console.log(newClickNum)
     const { data } = await axios.patch(`/api/${id}`, {
-      clickCount: newClickNum
+      clickNum: newClickNum
     });
+    console.log(data)
     return data
   } catch (error) {
     throw error
