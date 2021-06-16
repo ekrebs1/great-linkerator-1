@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
     marginBottom: 60,
-    display: "row",
   },
   media: {
     height: 0,
@@ -54,7 +53,7 @@ const LinkCardContent = ({ link, idx }) => {
   };
 
   const handleClick = (id, link, clickNum) => {
-    let newClickNum = clickNum += 1;
+    let newClickNum = (clickNum += 1);
     setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
     window.open(link);
@@ -69,88 +68,88 @@ const LinkCardContent = ({ link, idx }) => {
   };
 
   return (
-    <Card key={link.id} direction="row" className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar
-            aria-label="recipe"
-            style={{ cursor: "pointer" }}
-            className={classes.avatar}
-            onClick={() => {
-              handleClick(link.id, link.link, currentClickNum);
-            }}
-          >
-            <span role="img" aria-label="link emoji">
-              🔗
-            </span>
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <DeleteIcon
-              onClick={(event) => {
-                event.preventDefault();
-                handleDelete(link.id);
-              }}
-            />
-          </IconButton>
-        }
-        title={link.name}
-        subheader={link.createDate}
-      />
-      <CardMedia className={classes.media} image="img" title="link preview" />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          Click count: {currentClickNum}
-        </Typography>
-        <Typography variant="body1" color="textSecondary" component="p">
-          {link.comment}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expandedId,
-          })}
-          onClick={() => handleExpandClick(idx)}
-          aria-expanded={expandedId === idx}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
+    <>
+      <Card key={link.id} direction='row' className={classes.root}>
+        <CardHeader
+          avatar={
+            <Avatar
+              aria-label='recipe'
+              style={{ cursor: "pointer" }}
+              className={classes.avatar}
+              onClick={() => {
+                handleClick(link.id, link.link, currentClickNum);
+              }}>
+              <span role='img' aria-label='link emoji'>
+                🔗
+              </span>
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label='settings'>
+              <DeleteIcon
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleDelete(link.id);
+                }}
+              />
+            </IconButton>
+          }
+          title={link.name}
+          subheader={link.createDate}
+        />
+        <CardMedia className={classes.media} image='img' title='link preview' />
         <CardContent>
-          <Typography paragraph>Tags:</Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {link.tags[0]
-              ? link.tags.map((tags, idx) => {
-                  return (
-                    <div className="tags" key={idx}>
-                      <Chip
-                        color="primary"
-                        size="small"
-                        variant="outlined"
-                        className={classes.chip}
-                        key={tags.id}
-                        label={tags.name}
-                        // onClick={handleClick}
-                        // onDelete={handleDelete}
-                      />
-                    </div>
-                  );
-                })
-              : null}
+          <Typography variant='body2' color='textSecondary' component='p'>
+            Click count: {currentClickNum}
+          </Typography>
+          <Typography variant='body1' color='textSecondary' component='p'>
+            {link.comment}
           </Typography>
         </CardContent>
-      </Collapse>
-    </Card>
+        <CardActions disableSpacing>
+          <IconButton aria-label='add to favorites'>
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label='share'>
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expandedId,
+            })}
+            onClick={() => handleExpandClick(idx)}
+            aria-expanded={expandedId === idx}
+            aria-label='show more'>
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expandedId === idx} timeout='auto' unmountOnExit>
+          <CardContent>
+            <Typography paragraph>Tags:</Typography>
+            <Typography variant='body2' color='textSecondary' component='p'>
+              {link.tags[0]
+                ? link.tags.map((tags, idx) => {
+                    return (
+                      <div className='tags' key={idx}>
+                        <Chip
+                          color='primary'
+                          size='small'
+                          variant='outlined'
+                          className={classes.chip}
+                          key={tags.id}
+                          label={tags.name}
+                          // onClick={handleClick}
+                          // onDelete={handleDelete}
+                        />
+                      </div>
+                    );
+                  })
+                : null}
+            </Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    </>
   );
 };
 

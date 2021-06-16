@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LinkCard = ({ links, setLinks }) => {
-  
   useEffect(() => {
     deleteLink()
       .then((response) => {
@@ -59,12 +58,12 @@ const LinkCard = ({ links, setLinks }) => {
   }, [setLinks]);
 
   return (
-    <div style={{ marginTop: "50px" }}>
+    <>
       {links &&
         links.map((link, idx) => {
           return <LinkCardContent link={link} idx={idx} />;
         })}
-    </div>
+    </>
   );
 };
 
