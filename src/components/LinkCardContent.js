@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LinkCardContent = ({ link, idx }) => {
+const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const classes = useStyles();
   const [currentClickNum, setCurrentClickNum] = useState(link.clickNum);
   const [expandedId, setExpandedId] = useState(-1);
@@ -57,11 +57,12 @@ const LinkCardContent = ({ link, idx }) => {
     let newClickNum = clickNum += 1;
     setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
-    window.open(link);
+    // window.open(link);
   };
 
   const handleDelete = (id) => {
     deleteLink(id);
+
   };
 
   const handleCreate = () => {
@@ -69,6 +70,7 @@ const LinkCardContent = ({ link, idx }) => {
   };
 
   return (
+    link.active &&
     <Card key={link.id} direction="row" className={classes.root}>
       <CardHeader
         avatar={
