@@ -9,26 +9,33 @@ import Grid from "@material-ui/core/Grid";
 import Links from "./components/Links";
 import Search from "./components/Search";
 import { getLinks } from "./api";
+import AddLink from "./components/AddLink";
 var ReactRotatingText = require("react-rotating-text");
-
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     background: "#fff",
   },
+  toolBar: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   hero: {
-    backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://source.unsplash.com/Q1p7bh3SHj8")`,
+    backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://source.unsplash.com/Kj2SaNHG-hg")`,
     height: "400px",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
     position: "relative",
     display: "flex",
+
     justifyContent: "center",
     alignItems: "center",
     color: "#fff",
     fontSize: "4rem",
+    blur: "2px",
   },
+
   linkContainer: {
     paddingTop: theme.spacing(3),
   },
@@ -36,14 +43,20 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "800",
     paddingBottom: theme.spacing(3),
   },
-  boxTitle: {
-    textShadowColor: `rgba(0, 0, 0, 0.75)`,
-    textShadowOffset: `{ width: -1, height: 1 }`,
-    textShadowRadius: 15,
+
+  search: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  links: {},
+  content: {
+    display: "center",
+    textAlign: "center",
   },
 }));
 
 const App = () => {
+  const [tags, setTags] = useState([]);
   const [links, setLinks] = useState([]);
   const classes = useStyles();
 
@@ -59,35 +72,40 @@ const App = () => {
 
   return (
     <div className='App'>
-      {/* <AppBar className={classes.appBar} position='static'>
-        <Toolbar>
-          <Typography variant='h6' color='primary'>
-            Menu
-          </Typography>
-        </Toolbar>
-      </AppBar> */}
       <Box className={classes.hero}>
-        <Box className={classes.boxTitle}>
-          <ReactRotatingText items={["The Linkerator"]} pause='3000' />
-        
+        <Box className={classes.content}>
+          <Box className={classes.boxTitle}>
+            Welcome! <br></br>Start Searching Below!
+          </Box>
         </Box>
       </Box>
       <AppBar className={classes.appBar} position='static'>
-        <Toolbar>
-          <Typography variant='h6' color='primary'>
-            Menu
+        <Toolbar className={classes.toolBar}>
+          <Typography
+            className={classes.typography}
+            variant='h6'
+            color='primary'>
+            The Great Linkerator
           </Typography>
+          <Search
+            className={classes.search}
+            links={links}
+            setLinks={setLinks}
+          />
+          <AddLink
+            className={classes.addLink}
+            tags={tags}
+            setTags={setTags}
+            setLinks={setLinks}
+          />
         </Toolbar>
       </AppBar>
       <Container maxWidth='lg' className={classes.linkContainer}>
         <Typography variant='h4' className={classes.linkTitle}>
           Links
         </Typography>
-        <Grid container spacing={3}>
-          <Grid item md={4}>
-            <Search links={links} setLinks={setLinks} />
-            <Links links={links} setLinks={setLinks} />
-          </Grid>
+        <Grid container direction='row' justify='space-between'>
+          <Links className={classes.links} links={links} setLinks={setLinks} />
         </Grid>
       </Container>
     </div>
