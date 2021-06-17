@@ -29,6 +29,7 @@ async function buildTables() {
         "createDate" DATE NOT NULL,
         "clickNum" INTEGER,
         comment VARCHAR(255) NOT NULL,
+        favorite boolean DEFAULT false,
         active boolean DEFAULT true
         
       );
@@ -58,6 +59,7 @@ const createInitialLinks = async () => {
         createDate: "2020/08/31",
         clickNum: 12,
         comment: "A search utility tool.",
+        favorite: false,
         tags: ["search"],
       },
       {
@@ -66,6 +68,7 @@ const createInitialLinks = async () => {
         createDate: "2021/02/14",
         clickNum: 23,
         comment: "A social media website for family and friends.",
+        favorite: false,
         tags: ["social"],
       },
       {
@@ -74,6 +77,7 @@ const createInitialLinks = async () => {
         createDate: "2020/12/25",
         clickNum: 1,
         comment: "A social networking site for professional relationships",
+        favorite: true,
         tags: ["social", "business"],
       },
     ];

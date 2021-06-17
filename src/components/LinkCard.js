@@ -1,8 +1,10 @@
+
 import React, { useEffect } from "react";
 import { deleteLink } from "../api";
 import LinkCardContent from "./LinkCardContent";
 
 const LinkCard = ({ links, setLinks, tags }) => {
+
   useEffect(() => {
     deleteLink()
       .then((response) => {
