@@ -95,9 +95,7 @@ export async function updateFavorite(id, boo) {
 
 export async function getLinksByTag(tagName) {
   try {
-    const { data } = await axios.get(`/api/${tagName}/links`, {
-      tagName: tagName
-    })
+    const { data } = await axios.get(`/api/${tagName}/links`)
     return data
   } catch (error) {
     throw error

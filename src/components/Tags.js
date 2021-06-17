@@ -27,12 +27,13 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const Tags = ({tags}) => {
+  console.log(tags)
     const classes = useStyles();
     return (
             <>
             <h1>Tags</h1>   
-            {tags[0] 
-            ? tags.map((tag) => {
+            {tags.tags 
+            ? tags.tags.map((tag) => {
                     return (
                       <div className='tags'>
                         <Chip
