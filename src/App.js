@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Links from "./components/Links";
-import Search from "./components/Search";
 import { getLinks } from "./api";
-import AddLink from "./components/AddLink";
-var ReactRotatingText = require("react-rotating-text");
+import NavBar from "./components/NavBar";
+import Pages from "./components/Pages"
+import Header from "./Header.js"
+import { getTags } from "./api";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   app: {
     background: "#fff",
   },
@@ -72,9 +66,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
-  const [tags, setTags] = useState([]);
   const [links, setLinks] = useState([]);
+  const [tags, setTags] = useState([]);
   const classes = useStyles();
+
+  useEffect(() => {
+    getTags()
+      .then((response) => {
+        setTags(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const retrieveLinks = () => {
     getLinks()
@@ -92,47 +96,27 @@ const App = () => {
 
   return (
     <div className={classes.app}>
-      <Box className={classes.hero}>
-        <Box className={classes.content}>
-          <Box className={classes.boxTitle}>
-            Hello, World! <br></br>
-          </Box>
-          <Box className={classes.boxSubTitle}>Create a Link!</Box>
-          <AddLink
-            className={classes.addLink}
-            tags={tags}
-            setTags={setTags}
-            setLinks={setLinks}
+      <header>
+        <Header tags={tags} setTags={setTags} setLinks={setLinks} />
+        <NavBar 
+          tags={tags}
+          links={links}
+          setLinks={setLinks}
+          retrieveLinks={retrieveLinks}  
           />
-        </Box>
-      </Box>
-      <AppBar className={classes.appBar} position='static'>
-        <Toolbar className={classes.toolBar}>
-          <Typography
-            className={classes.typography}
-            variant='h6'
-            color='primary'>
-            🔗 The Great Linkerator
-          </Typography>
-
-          <Search
-            className={classes.search}
-            links={links}
-            setLinks={setLinks}
-            reset={retrieveLinks}
-          />
-        </Toolbar>
-      </AppBar>
-      <Container maxWidth='lg' className={classes.linkContainer}>
-        <Typography variant='h4' className={classes.linkTitle}>
-          Links
-        </Typography>
-        <Grid container direction='row' justify='space-between'>
-          <Links className={classes.links} links={links} setLinks={setLinks} />
-        </Grid>
-      </Container>
+       </header>
+      <main>
+        <Pages 
+          links={links}
+          setLinks={setLinks}
+          tags={tags} 
+          setTags={setTags}
+        />
+      </main>
     </div>
   );
 };
 
 export default App;
+
+

@@ -79,3 +79,15 @@ export async function updateClick(id, newClickNum){
     throw error
   }
 }
+
+export async function getLinksByTag(tagName) {
+  try {
+    console.log(tagName)
+    const { data } = await axios.get(`/api/${tagName}/links`, {
+      tagName: tagName
+    })
+    return data
+  } catch (error) {
+    throw error
+  }
+}
