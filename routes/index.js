@@ -103,7 +103,6 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
   }
 });
 
-
 apiRouter.delete("/:linkId", async (req, res, next) => {
   try {
     const link = await getLinkById(req.params.linkId);

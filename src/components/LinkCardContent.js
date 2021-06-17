@@ -50,11 +50,13 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
   );
   const [expandedId, setExpandedId] = useState(-1);
   const [isFavorite, setIsFavorite] = useState(link.favorite);
-  const [favIconColor, setFavIconColor] = useState(isFavorite ? {color: "#cd5f66"} : {color: "grey" });
+  const [favIconColor, setFavIconColor] = useState(
+    isFavorite ? { color: "#cd5f66" } : { color: "grey" }
+  );
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
-  console.log(isFavorite)
+  console.log(isFavorite);
 
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
@@ -73,14 +75,12 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     updateFavorite(id, boo);
     setIsFavorite(true);
     setFavIconColor({ color: "#cd5f66" });
-    console.log("set fav true")
   };
 
   const handleUnfavorite = (id, boo) => {
     updateFavorite(id, boo);
     setIsFavorite(false);
     setFavIconColor({ color: "grey" });
-    console.log("set fav false")
   };
 
   const handleEditPost = () => {
@@ -154,7 +154,7 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
                     handleFavorite(link.id, true);
                   }
                   if (isFavorite === true) {
-                    handleUnfavorite(link.id, false)
+                    handleUnfavorite(link.id, false);
                   }
                 }}
               />
