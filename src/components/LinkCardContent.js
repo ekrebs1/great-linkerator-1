@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const classes = useStyles();
-  const [currentClickNum, setCurrentClickNum] = useState(link.clickNum);
+  const [currentClickNum, setCurrentClickNum] = useState(link.clickNum ? link.clickNum : 0);
   const [expandedId, setExpandedId] = useState(-1);
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
@@ -61,7 +61,8 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
 
   const handleDelete = (id) => {
     deleteLink(id);
-
+    const activeLinks = links.filter(fLink => fLink.id !== link.id)
+    setLinks(activeLinks)
   };
 
   const handleCreate = () => {
@@ -90,8 +91,8 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
             <IconButton aria-label='settings'>
               <DeleteIcon
                 onClick={(event) => {
-                  event.preventDefault();
                   handleDelete(link.id);
+
                 }}
               />
             </IconButton>

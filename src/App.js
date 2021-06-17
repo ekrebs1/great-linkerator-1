@@ -69,7 +69,7 @@ const App = () => {
         console.error(error);
       });
   }, [setLinks]);
-
+  
   return (
     <div className='App'>
       <Box className={classes.hero}>
