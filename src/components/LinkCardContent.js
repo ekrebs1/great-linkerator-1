@@ -56,7 +56,7 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
-  console.log(isFavorite);
+
 
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
