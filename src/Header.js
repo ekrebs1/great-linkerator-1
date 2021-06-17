@@ -1,9 +1,7 @@
 import React from "react";
-import LinkCard from "./LinkCard";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import AddLink from "./components/AddLink";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -64,26 +62,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Links = ({ links, setLinks, tags, setTags }) => {
-  const classes = useStyles();
 
-  return (
-    <>
-      <Container maxWidth="lg" className={classes.linkContainer}>
-        <Typography variant="h4" className={classes.linkTitle}>
-          Links
-        </Typography>
-        <Grid container direction="row" justify="space-between">
-          <LinkCard
+const Header = ({tags, setLinks, setTags}) => {
+    const classes = useStyles();
+
+    return (
+        <Box className={classes.hero}>
+        <Box className={classes.content}>
+          <Box className={classes.boxTitle}>
+            Hello, World! <br></br>
+          </Box>
+          <Box className={classes.boxSubTitle}>Create a Link!</Box>
+          <AddLink
+            className={classes.addLink}
             tags={tags}
             setTags={setTags}
-            links={links}
             setLinks={setLinks}
           />
-        </Grid>
-      </Container>
-    </>
-  );
-};
+        </Box>
+      </Box>
+    )
+}
 
-export default Links;
+export default Header

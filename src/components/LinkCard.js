@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { getLinks, deleteLink, updateClick } from "../api";
-import { makeStyles } from "@material-ui/core/styles";
-import { blue } from "@material-ui/core/colors";
+
+import React, { useEffect } from "react";
+import { deleteLink } from "../api";
 import LinkCardContent from "./LinkCardContent";
 
+const LinkCard = ({ links, setLinks, tags }) => {
 
-const LinkCard = ({ links, setLinks }) => {
   useEffect(() => {
     deleteLink()
       .then((response) => {
@@ -20,7 +19,16 @@ const LinkCard = ({ links, setLinks }) => {
     <>
       {links &&
         links.map((link, idx) => {
-          return <LinkCardContent setLinks={setLinks} links={links} link={link} idx={idx} />;
+          return (
+            <LinkCardContent
+              key={idx}
+              tags={tags}
+              link={link}
+              links={links}
+              setLinks={setLinks}
+              idx={idx}
+            />
+          );
         })}
     </>
   );

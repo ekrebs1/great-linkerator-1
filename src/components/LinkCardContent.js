@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { getLinks, deleteLink, updateClick, updateFavorite } from "../api";
+import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { blue } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -43,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LinkCardContent = ({ links, setLinks, link, idx }) => {
+const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const classes = useStyles();
   const [currentClickNum, setCurrentClickNum] = useState(
     link.clickNum ? link.clickNum : 0
@@ -56,14 +53,15 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
-  console.log(isFavorite);
 
+  console.log(isFavorite);
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
     setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
     window.open(link);
   };
+
 
   const handleDelete = (id) => {
     deleteLink(id);
@@ -91,10 +89,17 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     console.log("delete tag");
   };
 
-  const handleClickTag = () => {
-    //search tag
-    console.log("tag");
+  const handleClickTag = async (tagName) => {
+    
+    // try {
+    //   const tagResults = await getLinksByTag(tagName);
+    //   setLinks(tagResults)
+    // } catch (error) {
+    //   console.error(error)
+    // }
   };
+
+
 
   return (
     link.active && (
