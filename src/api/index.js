@@ -83,6 +83,7 @@ export async function updateFavorite(id, boo){
     const { data } = await axios.patch(`/api/${id}`, {
       favorite: boo
     });
+    console.log(data)
     return data
   } catch (error) {
     throw error

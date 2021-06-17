@@ -91,7 +91,7 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
     updateFields.clickNum = clickNum;
   }
 
-  if (favorite) {
+  if (favorite === true || favorite === false) {
     updateFields.favorite = favorite;
   }
 
