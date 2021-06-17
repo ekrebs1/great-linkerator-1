@@ -60,7 +60,7 @@ const App = () => {
   const [links, setLinks] = useState([]);
   const classes = useStyles();
 
-  useEffect(() => {
+  const retrieveLinks = () => {
     getLinks()
       .then((response) => {
         setLinks(response.links);
@@ -68,7 +68,11 @@ const App = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [setLinks]);
+  }
+
+  useEffect(() => {
+    retrieveLinks()
+  }, []);
 
   return (
     <div className='App'>
@@ -91,6 +95,7 @@ const App = () => {
             className={classes.search}
             links={links}
             setLinks={setLinks}
+            reset={retrieveLinks}
           />
           <AddLink
             className={classes.addLink}

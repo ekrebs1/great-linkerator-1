@@ -50,8 +50,10 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
-const Search = ({ links, setLinks }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+
+const Search = ({links, setLinks, reset}) => {
+    const [searchQuery, setSearchQuery] = useState('');
+
 
   const handleSearchSubmit = () => {
     let filteredLinks = links.filter((link) => {
@@ -66,9 +68,9 @@ const Search = ({ links, setLinks }) => {
     console.log(searchQuery);
   };
 
-  const handleReset = (event) => {
-    console.log("reset");
-  };
+    const handleReset = (event) => {
+        reset();
+    }
 
   return (
     <div>
