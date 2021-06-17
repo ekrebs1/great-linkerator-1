@@ -18,10 +18,10 @@ const LinkCard = ({ links, setLinks }) => {
 
   return (
     <>
-      {links ?
+      {links &&
         links.map((link, idx) => {
           return <LinkCardContent setLinks={setLinks} links={links} link={link} idx={idx} />;
-        }) : <p>No Links Bookmarked!</p>}
+        })}
     </>
   );
 };

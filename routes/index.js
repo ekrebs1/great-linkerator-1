@@ -67,7 +67,7 @@ apiRouter.post("/links", async (req, res, next) => {
 
 apiRouter.patch("/:linkId", async (req, res, next) => {
   const { linkId } = req.params;
-  const { name, link, comment, tags, clickNum } = req.body;
+  const { name, link, comment, tags, clickNum, favorite } = req.body;
 
   const updateFields = {};
 
@@ -89,6 +89,10 @@ apiRouter.patch("/:linkId", async (req, res, next) => {
 
   if (clickNum) {
     updateFields.clickNum = clickNum;
+  }
+
+  if (favorite) {
+    updateFields.favorite = favorite;
   }
 
   try {

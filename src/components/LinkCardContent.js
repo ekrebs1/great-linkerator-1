@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getLinks, deleteLink, updateClick } from "../api";
+import { getLinks, deleteLink, updateClick, updateFavorite } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -45,8 +45,12 @@ const useStyles = makeStyles((theme) => ({
 
 const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const classes = useStyles();
-  const [currentClickNum, setCurrentClickNum] = useState(link.clickNum ? link.clickNum : 0);
+  const [currentClickNum, setCurrentClickNum] = useState(
+    link.clickNum ? link.clickNum : 0
+  );
   const [expandedId, setExpandedId] = useState(-1);
+  const [favIconColor, setFavIconColor] = useState({ color: "grey" });
+  const [isFavorite, setIsFavorite] = useState(false);
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
@@ -55,13 +59,25 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     let newClickNum = (clickNum += 1);
     setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
-    // window.open(link);
+    window.open(link);
   };
 
   const handleDelete = (id) => {
     deleteLink(id);
-    const activeLinks = links.filter(fLink => fLink.id !== link.id)
-    setLinks(activeLinks)
+    const activeLinks = links.filter((fLink) => fLink.id !== link.id);
+    setLinks(activeLinks);
+  };
+
+  const handleFavorite = (id) => {
+    updateFavorite(id, true);
+    setIsFavorite(true);
+    setFavIconColor({ color: "#cd5f66" });
+  };
+
+  const handleUnfavorite = (id) => {
+    updateFavorite(id, false);
+    setIsFavorite(false);
+    setFavIconColor({ color: "grey" });
   };
 
   const handleEditPost = () => {
@@ -71,103 +87,116 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
   const handleDeleteTag = () => {
     console.log("delete tag");
   };
-  
+
   const handleClickTag = () => {
     //search tag
-    console.log("tag")
+    console.log("tag");
   };
 
   return (
-    link.active &&
-    <>
-      <Card key={link.id} direction='row' className={classes.root}>
-        <CardHeader
-          avatar={
-            <Avatar
-              aria-label='recipe'
-              style={{ cursor: "pointer" }}
-              className={classes.avatar}
-              onClick={() => {
-                handleClick(link.id, link.link, currentClickNum);
-              }}>
-              <span role='img' aria-label='link emoji'>
-                🔗
-              </span>
-            </Avatar>
-          }
-          action={
-            <>
-            <IconButton aria-label='settings'>
-              <DeleteIcon
-                onClick={(event) => {
-                  handleDelete(link.id);
-
+    link.active && (
+      <>
+        <Card key={link.id} direction="row" className={classes.root}>
+          <CardHeader
+            avatar={
+              <Avatar
+                aria-label="recipe"
+                style={{ cursor: "pointer" }}
+                className={classes.avatar}
+                onClick={() => {
+                  handleClick(link.id, link.link, currentClickNum);
+                }}
+              >
+                <span role="img" aria-label="link emoji">
+                  🔗
+                </span>
+              </Avatar>
+            }
+            action={
+              <>
+                <IconButton aria-label="settings">
+                  <DeleteIcon
+                    onClick={() => {
+                      handleDelete(link.id);
+                    }}
+                  />
+                </IconButton>
+                <IconButton>
+                  <CreateIcon onClick={handleEditPost} />
+                </IconButton>
+              </>
+            }
+            title={link.name}
+            subheader={link.createDate}
+          />
+          <CardMedia
+            className={classes.media}
+            image="img"
+            title="link preview"
+          />
+          <CardContent>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Click count: {currentClickNum}
+            </Typography>
+            <Typography variant="body1" color="textSecondary" component="p">
+              {link.comment}
+            </Typography>
+          </CardContent>
+          <CardActions disableSpacing>
+            <IconButton aria-label="add to favorites">
+              <FavoriteIcon
+                style={favIconColor}
+                onClick={() => {
+                  if (isFavorite === true) {
+                    handleUnfavorite(link.id);
+                  } else {
+                    handleFavorite(link.id);
+                  }
                 }}
               />
             </IconButton>
-            <IconButton>
-              <CreateIcon 
-                onClick={handleEditPost}
-                />
+            <IconButton aria-label="share">
+              <ShareIcon />
             </IconButton>
-            </>
-          }
-          title={link.name}
-          subheader={link.createDate}
-        />
-        <CardMedia className={classes.media} image='img' title='link preview' />
-        <CardContent>
-          <Typography variant='body2' color='textSecondary' component='p'>
-            Click count: {currentClickNum}
-          </Typography>
-          <Typography variant='body1' color='textSecondary' component='p'>
-            {link.comment}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label='add to favorites'>
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label='share'>
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={clsx(classes.expand, {
-              [classes.expandOpen]: expandedId,
-            })}
-            onClick={() => handleExpandClick(idx)}
-            aria-expanded={expandedId === idx}
-            aria-label='show more'>
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={expandedId === idx} timeout='auto' unmountOnExit>
-          <CardContent>
-            <Typography paragraph>Tags:</Typography>
-            <Typography variant='body2' color='textSecondary' component='p'>
-              {link.tags[0]
-                ? link.tags.map((tags, idx) => {
-                    return (
-                      <div className='tags' key={idx}>
-                        <Chip
-                          color='primary'
-                          size='small'
-                          variant='outlined'
-                          className={classes.chip}
-                          key={tags.id}
-                          label={tags.name}
-                          onClick={handleClickTag}
-                          onDelete={handleDeleteTag}
-                        />
-                      </div>
-                    );
-                  })
-                : null}
-            </Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
-    </>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expandedId,
+              })}
+              onClick={() => handleExpandClick(idx)}
+              aria-expanded={expandedId === idx}
+              aria-label="show more"
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          </CardActions>
+          <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography paragraph>Tags:</Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {link.tags[0]
+                  ? link.tags.map((tags, idx) => {
+                      return (
+                        <div className="tags" key={idx}>
+                          <Chip
+                            color="primary"
+                            size="small"
+                            variant="outlined"
+                            className={classes.chip}
+                            key={tags.id}
+                            label={tags.name}
+                            onClick={handleClickTag}
+                            onDelete={handleDeleteTag}
+                          />
+                        </div>
+                      );
+                    })
+                  : null}
+              </Typography>
+            </CardContent>
+          </Collapse>
+        </Card>
+      </>
+    )
   );
 };
 
