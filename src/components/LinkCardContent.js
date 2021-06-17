@@ -19,7 +19,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     transform: "rotate(0deg)",
   },
   avatar: {
-    backgroundColor: blue[100],
+    backgroundColor: "#557a95",
   },
 }));
 
@@ -65,8 +64,17 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     setLinks(activeLinks)
   };
 
-  const handleCreate = () => {
+  const handleEditPost = () => {
     console.log("Edit");
+  };
+
+  const handleDeleteTag = () => {
+    console.log("delete tag");
+  };
+  
+  const handleClickTag = () => {
+    //search tag
+    console.log("tag")
   };
 
   return (
@@ -88,6 +96,7 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
             </Avatar>
           }
           action={
+            <>
             <IconButton aria-label='settings'>
               <DeleteIcon
                 onClick={(event) => {
@@ -96,6 +105,12 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
                 }}
               />
             </IconButton>
+            <IconButton>
+              <CreateIcon 
+                onClick={handleEditPost}
+                />
+            </IconButton>
+            </>
           }
           title={link.name}
           subheader={link.createDate}
@@ -141,8 +156,8 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
                           className={classes.chip}
                           key={tags.id}
                           label={tags.name}
-                          // onClick={handleClick}
-                          // onDelete={handleDelete}
+                          onClick={handleClickTag}
+                          onDelete={handleDeleteTag}
                         />
                       </div>
                     );

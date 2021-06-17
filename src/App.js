@@ -13,8 +13,11 @@ import AddLink from "./components/AddLink";
 var ReactRotatingText = require("react-rotating-text");
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
+  app: {
     background: "#fff",
+  },
+  appBar: {
+    background: "#557a95",
   },
   toolBar: {
     display: "flex",
@@ -31,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
     justifyContent: "center",
     alignItems: "center",
-    color: "#fff",
-    fontSize: "4rem",
+    // color: "#fff",
+    // fontSize: "4rem",
     blur: "2px",
   },
 
@@ -48,10 +51,23 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
-  links: {},
+
   content: {
     display: "center",
     textAlign: "center",
+  },
+  boxTitle: {
+    color: "#fff",
+    fontSize: "4rem",
+    paddingBottom: "4rem",
+  },
+  boxSubTitle: {
+    color: "#fff",
+    fontSize: "1.5rem",
+    paddingBottom: "1rem",
+  },
+  typography: {
+    color: "#fff",
   },
 }));
 
@@ -60,7 +76,7 @@ const App = () => {
   const [links, setLinks] = useState([]);
   const classes = useStyles();
 
-  useEffect(() => {
+  const retrieveLinks = () => {
     getLinks()
       .then((response) => {
         setLinks(response.links);
@@ -68,15 +84,26 @@ const App = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [setLinks]);
-  
+  }
+
+  useEffect(() => {
+    retrieveLinks()
+  }, []);
+
   return (
-    <div className='App'>
+    <div className={classes.app}>
       <Box className={classes.hero}>
         <Box className={classes.content}>
           <Box className={classes.boxTitle}>
-            Welcome! <br></br>Start Searching Below!
+            Hello, World! <br></br>
           </Box>
+          <Box className={classes.boxSubTitle}>Create a Link!</Box>
+          <AddLink
+            className={classes.addLink}
+            tags={tags}
+            setTags={setTags}
+            setLinks={setLinks}
+          />
         </Box>
       </Box>
       <AppBar className={classes.appBar} position='static'>
@@ -85,18 +112,14 @@ const App = () => {
             className={classes.typography}
             variant='h6'
             color='primary'>
-            The Great Linkerator
+            🔗 The Great Linkerator
           </Typography>
+
           <Search
             className={classes.search}
             links={links}
             setLinks={setLinks}
-          />
-          <AddLink
-            className={classes.addLink}
-            tags={tags}
-            setTags={setTags}
-            setLinks={setLinks}
+            reset={retrieveLinks}
           />
         </Toolbar>
       </AppBar>
