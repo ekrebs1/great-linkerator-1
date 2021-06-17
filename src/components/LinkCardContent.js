@@ -1,11 +1,15 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { deleteLink, updateClick, updateFavorite } from "../api";
 import ShareModal from "./ShareModal"
+=======
+import React, { useState, useEffect } from "react";
+import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
+>>>>>>> main
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Collapse from "@material-ui/core/Collapse";
@@ -17,7 +21,10 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -42,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LinkCardContent = ({ links, setLinks, link, idx }) => {
+const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const classes = useStyles();
   const [currentClickNum, setCurrentClickNum] = useState(
     link.clickNum ? link.clickNum : 0
@@ -56,13 +63,14 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
 
-
+  console.log(isFavorite);
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
     setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
     window.open(link);
   };
+
 
   const handleDelete = (id) => {
     deleteLink(id);
@@ -90,10 +98,17 @@ const LinkCardContent = ({ links, setLinks, link, idx }) => {
     console.log("delete tag");
   };
 
-  const handleClickTag = () => {
-    //search tag
-    console.log("tag");
+  const handleClickTag = async (tagName) => {
+    
+    // try {
+    //   const tagResults = await getLinksByTag(tagName);
+    //   setLinks(tagResults)
+    // } catch (error) {
+    //   console.error(error)
+    // }
   };
+
+
 
   return (
     link.active && (

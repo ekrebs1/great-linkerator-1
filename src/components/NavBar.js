@@ -1,9 +1,10 @@
 import React from "react";
-import LinkCard from "./LinkCard";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import Search from "./Search";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -64,26 +65,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Links = ({ links, setLinks, tags, setTags }) => {
+const NavBar = ({ tags, links, setLinks, retrieveLinks }) => {
   const classes = useStyles();
-
   return (
-    <>
-      <Container maxWidth="lg" className={classes.linkContainer}>
-        <Typography variant="h4" className={classes.linkTitle}>
-          Links
+    <AppBar className={classes.appBar} position="static">
+      <Toolbar className={classes.toolBar}>
+      <Link to="/">
+
+        <Typography className={classes.typography} variant="h6" color="primary">
+          <span role="img" aria-label="link emoji">
+            🔗{" "}
+          </span>
+          The Great Linkerator
         </Typography>
-        <Grid container direction="row" justify="space-between">
-          <LinkCard
-            tags={tags}
-            setTags={setTags}
-            links={links}
-            setLinks={setLinks}
-          />
-        </Grid>
-      </Container>
-    </>
+        </Link>
+        <Link to="/tags">Tags</Link>
+        <Link to="/favorites">Favorites</Link>
+
+        <Search
+          className={classes.search}
+          links={links}
+          setLinks={setLinks}
+          reset={retrieveLinks}
+        />
+      </Toolbar>
+    </AppBar>
   );
 };
 
-export default Links;
+export default NavBar;

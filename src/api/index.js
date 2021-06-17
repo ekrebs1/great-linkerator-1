@@ -45,7 +45,6 @@ export async function createLinks(
       clickNum: clickNum,
     });
 
-    console.log(data);
     return data;
   } catch (error) {
     throw error;
@@ -93,3 +92,15 @@ export async function updateFavorite(id, boo) {
     throw error;
   }
 }
+
+export async function getLinksByTag(tagName) {
+  try {
+    const { data } = await axios.get(`/api/${tagName}/links`, {
+      tagName: tagName
+    })
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
