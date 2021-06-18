@@ -4,6 +4,7 @@ import { Modal, Button, TextField } from "@material-ui/core/";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { createLinks } from "../api";
+import Tooltip from '@material-ui/core/Tooltip';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -115,20 +116,23 @@ const AddLink = ({ setLinks }) => {
   );
 
   return (
-    <>
-      <Fab onClick={handleOpen} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
+     <div>
+       
+      <Tooltip title="Create Link" aria-label="add">
+        <Fab onClick={handleOpen} color="primary" aria-label="add">
+          <AddIcon />
+        </Fab>
+      </Tooltip>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="create-activity-name"
-        aria-describedby="create-activity-description"
-      >
-        {body}
-      </Modal>
-    </>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="create-activity-name"
+          aria-describedby="create-activity-description"
+        >
+          {body}
+        </Modal>
+    </div>
   );
 };
 

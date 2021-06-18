@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import ShareModal from "./ShareModal";
+import React, { useState, useEffect } from "react";
 import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -7,18 +6,17 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import CardMedia from "@material-ui/core/CardMedia";
 import Collapse from "@material-ui/core/Collapse";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
-import { TramRounded } from "@material-ui/icons";
-import HistoryIcon from '@material-ui/icons/History';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +47,6 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const [currentClickNum, setCurrentClickNum] = useState(
     link.clickNum ? link.clickNum : 0
   );
-  const [onTag, setOnTag] = useState(false)
   const [expandedId, setExpandedId] = useState(-1);
   const [isFavorite, setIsFavorite] = useState(link.favorite);
   const [favIconColor, setFavIconColor] = useState(
@@ -66,6 +63,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
     updateClick(id, newClickNum);
     window.open(link);
   };
+
 
   const handleDelete = (id) => {
     deleteLink(id);
@@ -93,24 +91,16 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   };
 
   const handleClickTag = async (tagName) => {
-    if (onTag === false) {
-      let linksByTag = await getLinksByTag(tagName)
-      console.log(linksByTag[0], "LINKS BY TAG")
-      setLinks(linksByTag[0]);
-      console.log(links, "LIKES AFTER SETTING")
-      setOnTag(true)
+    try {
+      const tagResults = await getLinksByTag(tagName);
+      console.log(tagResults, "tag results**********")
+      setLinks(tagResults)
+    } catch (error) {
+      console.error(error)
     }
   };
 
-  const handleResetTag = async () => {
 
-    console.log(links, "PRESET LINKS")
-      const allLinks = await getLinks()
-      console.log(allLinks.links)
-      setLinks(allLinks[0])
-      console.log(links, "SET LINKS")
-      setOnTag(false)
-  }
 
   return (
     link.active && (
@@ -133,26 +123,26 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
             }
             action={
               <>
-                <IconButton aria-label="settings">
-                  <DeleteIcon
-                    onClick={() => {
-                      handleDelete(link.id);
-                    }}
-                  />
-                </IconButton>
-                <IconButton>
-                  <CreateIcon onClick={handleEditPost} />
-                </IconButton>
+                <Tooltip title="Delete">
+                  <IconButton aria-label="settings">
+                    <DeleteIcon
+                      onClick={() => {
+                        handleDelete(link.id);
+                      }}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Edit">
+                  <IconButton>
+                    <CreateIcon onClick={handleEditPost} />
+                  </IconButton>
+                </Tooltip>
               </>
             }
             title={link.name}
             subheader={link.createDate}
           />
-          <CardMedia
-            className={classes.media}
-            image="img"
-            title="link preview"
-          />
+
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
               Click count: {currentClickNum}
@@ -176,7 +166,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
               />
             </IconButton>
             <IconButton aria-label="share">
-              <ShareModal link={link} />
+              <ShareIcon />
             </IconButton>
             <IconButton
               className={clsx(classes.expand, {
@@ -204,10 +194,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                             className={classes.chip}
                             key={tags.id}
                             label={tags.name}
-                            onClick={(event) => {
-                              handleClickTag(tags.name)
-                              
-                            }}
+                            onClick={handleClickTag}
                             onDelete={handleDeleteTag}
                           />
                         </div>
@@ -215,7 +202,6 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                     })
                   : null}
               </Typography>
-              <HistoryIcon onClick={handleResetTag} />
             </CardContent>
           </Collapse>
         </Card>

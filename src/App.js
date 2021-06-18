@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getLinks } from "./api";
 import NavBar from "./components/NavBar";
 import Pages from "./components/Pages"
-import Header from "./Header.js"
+import Header from "./components/Header.js"
 import { getTags } from "./api";
 
 export const useStyles = makeStyles((theme) => ({
