@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import EditModal from "./EditModal"
+import EditModal from "./EditModal";
 import ShareModal from "./ShareModal";
-import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
+import {
+  getLinks,
+  deleteLink,
+  updateClick,
+  updateFavorite,
+  getLinksByTag,
+} from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -18,7 +24,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateIcon from "@material-ui/icons/Create";
 import { Chip } from "@material-ui/core";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: "#557a95",
+    "&:hover": {
+      backgroundColor: "#0f3e61",
+    },
   },
 }));
 
@@ -54,7 +63,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const [favIconColor, setFavIconColor] = useState(
     isFavorite ? { color: "#cd5f66" } : { color: "grey" }
   );
-  const [editState, setEditState] = useState(false)
+  const [editState, setEditState] = useState(false);
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
@@ -65,7 +74,6 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
     updateClick(id, newClickNum);
     window.open(link);
   };
-
 
   const handleDelete = (id) => {
     deleteLink(id);
@@ -86,7 +94,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   };
 
   const handleEditPost = () => {
-    setEditState(true)
+    setEditState(true);
   };
   const handleDeleteTag = () => {
     console.log("delete tag");
@@ -95,37 +103,34 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const handleClickTag = async (tagName) => {
     try {
       const tagResults = await getLinksByTag(tagName);
-      console.log(tagResults, "tag results**********")
-      setLinks(tagResults)
+      console.log(tagResults, "tag results**********");
+      setLinks(tagResults);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
-
-
 
   return (
     link.active && (
       <>
-        <Card key={link.id} direction="row" className={classes.root}>
+        <Card key={link.id} direction='row' className={classes.root}>
           <CardHeader
             avatar={
               <Avatar
-                aria-label="recipe"
+                aria-label='recipe'
                 style={{ cursor: "pointer" }}
                 className={classes.avatar}
                 onClick={() => {
                   handleClick(link.id, link.link, currentClickNum);
-                }}
-              >
-                <span role="img" aria-label="link emoji">
+                }}>
+                <span role='img' aria-label='link emoji'>
                   🔗
                 </span>
               </Avatar>
             }
             action={
               <>
-                <IconButton aria-label="settings">
+                <IconButton aria-label='settings'>
                   <DeleteIcon
                     onClick={() => {
                       handleDelete(link.id);
@@ -134,7 +139,9 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 </IconButton>
                 <IconButton>
                   <CreateIcon onClick={handleEditPost} />
-                  {editState && <EditModal links={links} link={link} setLinks={setLinks}/> }
+                  {editState && (
+                    <EditModal links={links} link={link} setLinks={setLinks} />
+                  )}
                 </IconButton>
               </>
             }
@@ -143,15 +150,15 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
           />
 
           <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography variant='body2' color='textSecondary' component='p'>
               Click count: {currentClickNum}
             </Typography>
-            <Typography variant="body1" color="textSecondary" component="p">
+            <Typography variant='body1' color='textSecondary' component='p'>
               {link.comment}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label='add to favorites'>
               <FavoriteIcon
                 style={favIconColor}
                 onClick={() => {
@@ -164,7 +171,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 }}
               />
             </IconButton>
-            <IconButton aria-label="share">
+            <IconButton aria-label='share'>
               <ShareIcon />
             </IconButton>
             <IconButton
@@ -173,23 +180,22 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
               })}
               onClick={() => handleExpandClick(idx)}
               aria-expanded={expandedId === idx}
-              aria-label="show more"
-            >
+              aria-label='show more'>
               <ExpandMoreIcon />
             </IconButton>
           </CardActions>
-          <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
+          <Collapse in={expandedId === idx} timeout='auto' unmountOnExit>
             <CardContent>
               <Typography paragraph>Tags:</Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography variant='body2' color='textSecondary' component='p'>
                 {link.tags[0]
                   ? link.tags.map((tags, idx) => {
                       return (
-                        <div className="tags" key={idx}>
+                        <div className='tags' key={idx}>
                           <Chip
-                            color="primary"
-                            size="small"
-                            variant="outlined"
+                            color='primary'
+                            size='small'
+                            variant='outlined'
                             className={classes.chip}
                             key={tags.id}
                             label={tags.name}

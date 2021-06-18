@@ -64,12 +64,12 @@ const useStyles = makeStyles((theme) => ({
 
   titles: {
     color: "#fff",
-    fontSize: "20px",
-    lineHeight: "20px",
+    fontSize: "30px",
+    lineHeight: "30px",
 
     transition: "transform 0.4s ease",
     textDecoration: "none",
-    fontFamily: "Quicksand",
+    font: "Roboto",
     "&:hover": {
       transform: "scale(1.5, 1.5)",
     },
