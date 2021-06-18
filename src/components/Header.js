@@ -62,26 +62,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Header = ({ tags, setLinks, setTags }) => {
+  const classes = useStyles();
 
-const Header = ({tags, setLinks, setTags}) => {
-    const classes = useStyles();
-
-    return (
-        <Box className={classes.hero}>
-        <Box className={classes.content}>
-          <Box className={classes.boxTitle}>
-            Hello, World! <br></br>
-          </Box>
-          <Box className={classes.boxSubTitle}>Create a Link!</Box>
-          <AddLink
-            className={classes.addLink}
-            tags={tags}
-            setTags={setTags}
-            setLinks={setLinks}
-          />
+  return (
+    <Box className={classes.hero}>
+      <Box className={classes.content}>
+        <Box className={classes.boxTitle}>
+          The Great Linkerator <br></br>
         </Box>
+        <Box className={classes.boxSubTitle}>Create a Link!</Box>
+        <AddLink
+          className={classes.addLink}
+          tags={tags}
+          setTags={setTags}
+          setLinks={setLinks}
+        />
       </Box>
-    )
-}
+    </Box>
+  );
+};
 
-export default Header
+export default Header;
