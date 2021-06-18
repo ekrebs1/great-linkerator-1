@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Dropdown from "./Dropdown";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -69,11 +71,12 @@ const Links = ({ links, setLinks, tags, setTags }) => {
 
   return (
     <>
-      <Container maxWidth="lg" className={classes.linkContainer}>
-        <Typography variant="h4" className={classes.linkTitle}>
+      <Container maxWidth='lg' className={classes.linkContainer}>
+        <Typography variant='h4' className={classes.linkTitle}>
           Links
         </Typography>
-        <Grid container direction="row" justify="space-between">
+        <Dropdown links={links} setLinks={setLinks} />
+        <Grid container direction='row' justify='space-between'>
           <LinkCard
             tags={tags}
             setTags={setTags}
