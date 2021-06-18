@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import EditModal from "./EditModal"
+import ShareModal from "./ShareModal";
 import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -123,20 +125,17 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
             }
             action={
               <>
-                <Tooltip title="Delete">
-                  <IconButton aria-label="settings">
-                    <DeleteIcon
-                      onClick={() => {
-                        handleDelete(link.id);
-                      }}
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit">
-                  <IconButton>
-                    <CreateIcon onClick={handleEditPost} />
-                  </IconButton>
-                </Tooltip>
+                <IconButton aria-label="settings">
+                  <DeleteIcon
+                    onClick={() => {
+                      handleDelete(link.id);
+                    }}
+                  />
+                </IconButton>
+                <IconButton>
+                  <CreateIcon onClick={handleEditPost} />
+                  {editState && <EditModal links={links} link={link} setLinks={setLinks}/> }
+                </IconButton>
               </>
             }
             title={link.name}

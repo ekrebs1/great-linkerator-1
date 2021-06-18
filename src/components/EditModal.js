@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core/";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import { createLinks } from "../api";
+import CreateIcon from "@material-ui/icons/Create";
+import { patchLink } from "../api";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -30,15 +31,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditLink = ({ setLinks }) => {
-  const [name, setName] = useState("");
-  const [link, setLink] = useState("");
-  const [comment, setComment] = useState("");
-  const [createDate, setCreateDate] = useState("");
-  const [tags, setTags] = useState([]);
+const EditModal = ({ links, link, setLinks }) => {
+  const [name, setName] = useState(link.name);
+  const [newLink, setLink] = useState("")
+  const [url, setUrl] = useState(link.link);
+  const [comment, setComment] = useState(link.comment);
+  const [tags, setTags] = useState(link.tags.tags);
+  const [id, setId] = useState(link.id)
+  const [clickNum, setClickNum] = useState(link.clickNum)
 
   const [modalStyle] = useState(getModalStyle);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const classes = useStyles();
 
   const handleOpen = () => {
@@ -50,16 +53,15 @@ const EditLink = ({ setLinks }) => {
 
   const handleCreateLink = async (event) => {
     event.preventDefault();
-    const { newLink } = await createLinks(
+    await patchLink(
+      id,
       name,
-      link,
-      createDate,
+      url,
       comment,
+      clickNum,
       tags
     );
-    setLinks((prevLinks) => {
-      return [...prevLinks, newLink];
-    });
+    setLinks(links)
     handleClose();
   };
 
@@ -76,29 +78,21 @@ const EditLink = ({ setLinks }) => {
           }}
         />
         <TextField
+          type="url"
+          label="url"
+          placeholder="url"
+          value={url}
+          onInput={(event) => {
+            setLink(event.target.value);
+          }}
+        />
+        <TextField
           type="text"
           label="comment"
           placeholder="comment"
           value={comment}
           onInput={(event) => {
             setComment(event.target.value);
-          }}
-        />
-        <TextField
-          type="url"
-          label="url"
-          placeholder="url"
-          value={link}
-          onInput={(event) => {
-            setLink(event.target.value);
-          }}
-        />
-        <TextField
-          type="date"
-          label=""
-          value={createDate}
-          onInput={(event) => {
-            setCreateDate(event.target.value);
           }}
         />
         <TextField
@@ -115,11 +109,6 @@ const EditLink = ({ setLinks }) => {
   );
 
   return (
-    <>
-      <Fab onClick={handleOpen} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
-
       <Modal
         open={open}
         onClose={handleClose}
@@ -128,8 +117,7 @@ const EditLink = ({ setLinks }) => {
       >
         {body}
       </Modal>
-    </>
   );
 };
 
-export default EditLink;
+export default EditModal;
