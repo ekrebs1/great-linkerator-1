@@ -69,12 +69,13 @@ export async function deleteLink(id) {
   }
 }
 
-export async function patchLink(id, name, link, comment, tags ) {
+export async function patchLink(id, name, link, comment, clickNum, tags ) {
   try {
     const { data } = await axios.patch(`/api/${id}`, {
       name: name,
       link: link,
       comment: comment,
+      clickNum: clickNum,
       tags: tags
     });
     return data;

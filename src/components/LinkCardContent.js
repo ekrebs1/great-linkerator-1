@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import EditModal from "./EditModal"
 import ShareModal from "./ShareModal";
 import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
@@ -142,6 +143,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 </IconButton>
                 <IconButton>
                   <CreateIcon onClick={handleEditPost} />
+                  {editState && <EditModal links={links} link={link} setLinks={setLinks}/> }
                 </IconButton>
               </>
             }
