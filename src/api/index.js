@@ -69,7 +69,19 @@ export async function deleteLink(id) {
   }
 }
 
-export async function patchLink() {}
+export async function patchLink(id, name, link, comment, tags ) {
+  try {
+    const { data } = await axios.patch(`/api/${id}`, {
+      name: name,
+      link: link,
+      comment: comment,
+      tags: tags
+    });
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function updateClick(id, newClickNum) {
   try {
