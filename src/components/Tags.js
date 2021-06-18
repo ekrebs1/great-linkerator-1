@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const Tags = ({tags}) => {
-  console.log(tags)
     const classes = useStyles();
     return (
             <>
