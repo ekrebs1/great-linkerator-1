@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
 const Dropdown = ({ links, setLinks }) => {
   const classes = useStyles();
 
-  const handleSort = () => {
+  const handleSortClicks = () => {
     let linksClicks = [...links].sort((a, b) => {
-      return parseInt(b.clickNum) - parseInt(a.clickNum);
+      return b.clickNum - a.clickNum;
     });
 
     setLinks(linksClicks);
@@ -28,8 +28,8 @@ const Dropdown = ({ links, setLinks }) => {
     <>
       <FormControl className={classes.formControl}>
         <InputLabel>Sort by...</InputLabel>
-        <Select onChange={handleSort}>
-          <MenuItem value={handleSort}>Click Count</MenuItem>
+        <Select onChange={handleSortClicks}>
+          <MenuItem value={handleSortClicks}>Click Count</MenuItem>
         </Select>
       </FormControl>
     </>
