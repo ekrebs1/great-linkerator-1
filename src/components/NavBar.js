@@ -59,28 +59,37 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     fontSize: "1.5rem",
     paddingBottom: "1rem",
+    textDecoration: "none",
   },
-  typography: {
+
+  titles: {
     color: "#fff",
+    fontSize: "20px",
+    lineHeight: "20px",
+
+    transition: "transform 0.4s ease",
+    textDecoration: "none",
+    fontFamily: "Quicksand",
+    "&:hover": {
+      transform: "scale(1.5, 1.5)",
+    },
   },
 }));
 
 const NavBar = ({ tags, links, setLinks, retrieveLinks }) => {
   const classes = useStyles();
   return (
-    <AppBar className={classes.appBar} position="static">
+    <AppBar className={classes.appBar} position='static'>
       <Toolbar className={classes.toolBar}>
-      <Link to="/">
-
-        <Typography className={classes.typography} variant="h6" color="primary">
-          <span role="img" aria-label="link emoji">
-            🔗{" "}
-          </span>
-          The Great Linkerator
-        </Typography>
+        <Link to='/' className={classes.titles}>
+          Home
         </Link>
-        <Link to="/tags">Tags</Link>
-        <Link to="/favorites">Favorites</Link>
+        <Link to='/tags' className={classes.titles}>
+          Tags
+        </Link>
+        <Link to='/favorites' className={classes.titles}>
+          Favorites
+        </Link>
 
         <Search
           className={classes.search}
