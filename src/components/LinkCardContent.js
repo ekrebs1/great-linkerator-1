@@ -55,6 +55,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const [favIconColor, setFavIconColor] = useState(
     isFavorite ? { color: "#cd5f66" } : { color: "grey" }
   );
+  const [editState, setEditState] = useState(false)
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
@@ -85,9 +86,8 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   };
 
   const handleEditPost = () => {
-    console.log("Edit");
+    setEditState(true)
   };
-
   const handleDeleteTag = () => {
     console.log("delete tag");
   };
