@@ -14,6 +14,7 @@ import { green } from "@material-ui/core/colors";
 import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
 import UndoIcon from "@material-ui/icons/Undo";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
@@ -50,14 +51,20 @@ const BootstrapInput = withStyles((theme) => ({
   },
 }))(InputBase);
 
-const Search = ({ links, setLinks, reset }) => {
+const Search = ({ links, setLinks, reset, tags }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchSubmit = () => {
     let filteredLinks = links.filter((link) => {
-      return link.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return link.link.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        link.tags.filter((tag) => {
+          return tag.name.toLowerCase().includes(searchQuery.toLowerCase());
+        }).length > 0
+        ? link
+        : "";
     });
     setLinks(filteredLinks);
+    setSearchQuery("")
   };
 
   const handleOnChange = (event) => {
@@ -77,13 +84,18 @@ const Search = ({ links, setLinks, reset }) => {
         placeholder='Search...'
         id='bootstrap-input'
         onChange={handleOnChange}
+        value={searchQuery}
       />
-      <IconButton aria-label='search'>
-        <SearchIcon onClick={handleSearchSubmit} />
-      </IconButton>
-      <IconButton aria-label='search'>
+      <Tooltip title="Search">
+        <IconButton aria-label='search'>
+          <SearchIcon onClick={handleSearchSubmit} />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Reset">
+      <IconButton aria-label='reset'>
         <UndoIcon onClick={handleReset} />
       </IconButton>
+      </Tooltip>
     </div>
   );
 };
