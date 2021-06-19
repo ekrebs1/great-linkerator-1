@@ -150,7 +150,7 @@ apiRouter.get("/:tagName/links", async (req, res, next) => {
   // read the tagname from the params
   const { tagName } = req.params;
   try {
-    // use our method to get posts by tag name from the db
+    // use our method to get links by tag name from the db
     const links = await getLinksByTagName(tagName);
 
     res.send([links]);

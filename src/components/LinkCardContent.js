@@ -1,5 +1,8 @@
 import { Chip } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import React, { useState } from "react";
+import EditModal from "./EditModal";
+import ShareModal from "./ShareModal";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -19,6 +22,7 @@ import React, { useState } from "react";
 import { deleteLink, getLinksByTag, updateClick, updateFavorite } from "../api";
 import EditModal from "./EditModal";
 import ShareModal from "./ShareModal";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,7 +111,9 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 style={{ cursor: "pointer" }}
                 className={classes.avatar}
                 onClick={() => {
+
                   handleClick(link.id, link.link, clickNum);
+
                 }}
               >
                 <span role="img" aria-label="link emoji">

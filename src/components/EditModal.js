@@ -1,7 +1,8 @@
 import { Button, Modal, TextField } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
-import { patchLink } from "../api";
+import { getLinks, patchLink } from "../api";
+
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -41,23 +42,26 @@ const EditModal = ({ links, link, setLinks }) => {
   const [open, setOpen] = useState(true);
   const classes = useStyles();
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleCreateLink = async (event) => {
+  const handlePatchLink = async (event) => {
     event.preventDefault();
-    await patchLink(id, name, url, comment, clickNum, tags);
-    setLinks(links);
-    handleClose();
+
+    try {
+      await patchLink(id, name, url, comment, clickNum, tags);
+      let updatedLinks = await getLinks();
+      setLinks(updatedLinks.links);
+      handleClose();
+    } catch (err) {
+      throw err;
+    }
   };
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <form noValidate autoComplete="off" onSubmit={handleCreateLink}>
+      <form noValidate autoComplete="off" onSubmit={handlePatchLink}>
         <TextField
           type="text"
           label="name"
