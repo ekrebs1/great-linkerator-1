@@ -62,6 +62,11 @@ const AddLink = ({ setLinks }) => {
       return [...prevLinks, newLink];
     });
     handleClose();
+    setName("");
+    setLink("");
+    setComment("");
+    setCreateDate("");
+    setTags([]);
   };
 
   const body = (
