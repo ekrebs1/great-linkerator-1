@@ -1,8 +1,8 @@
-
 import React from "react";
 import LinkCardContent from "./LinkCardContent";
 
 const LinkCard = ({ links, setLinks, tags }) => {
+
   return (
     <>
       {links &&

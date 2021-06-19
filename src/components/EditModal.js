@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { Button, Modal, TextField } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
-import { Modal, Button, TextField } from "@material-ui/core/";
+import React, { useState } from "react";
 import { getLinks, patchLink } from "../api";
+
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -47,6 +48,7 @@ const EditModal = ({ links, link, setLinks }) => {
 
   const handlePatchLink = async (event) => {
     event.preventDefault();
+
     try {
       await patchLink(id, name, url, comment, clickNum, tags);
       let updatedLinks = await getLinks();

@@ -1,24 +1,28 @@
+import { Chip } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
 import React, { useState } from "react";
 import EditModal from "./EditModal";
 import ShareModal from "./ShareModal";
-import { deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CreateIcon from "@material-ui/icons/Create";
-import { Chip } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import CreateIcon from "@material-ui/icons/Create";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import clsx from "clsx";
+import React, { useState } from "react";
+import { deleteLink, getLinksByTag, updateClick, updateFavorite } from "../api";
+import EditModal from "./EditModal";
+import ShareModal from "./ShareModal";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,9 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const classes = useStyles();
-  const [currentClickNum, setCurrentClickNum] = useState(
-    link.clickNum ? link.clickNum : 0
-  );
+  const [clickNum, setClickNum] = useState(link.clickNum);
   const [onTag, setOnTag] = useState(false);
   const [expandedId, setExpandedId] = useState(-1);
   const [isFavorite, setIsFavorite] = useState(link.favorite);
@@ -64,9 +66,10 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   };
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
-    setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
+    setClickNum(newClickNum);
     window.open(link);
+    window.location.reload();
   };
   const handleDelete = (id) => {
     deleteLink(id);
@@ -108,7 +111,9 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 style={{ cursor: "pointer" }}
                 className={classes.avatar}
                 onClick={() => {
-                  handleClick(link.id, link.link, currentClickNum);
+
+                  handleClick(link.id, link.link, clickNum);
+
                 }}
               >
                 <span role="img" aria-label="link emoji">
@@ -146,7 +151,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="p">
-              Click count: {currentClickNum}
+              Click count: {link.clickNum}
             </Typography>
             <Typography variant="body1" color="textSecondary" component="p">
               {link.comment}

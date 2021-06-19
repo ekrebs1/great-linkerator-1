@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Modal, Button, TextField } from "@material-ui/core/";
+import { Button, Modal, TextField } from "@material-ui/core/";
 import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import { createLinks } from "../api";
+import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import AddIcon from "@material-ui/icons/Add";
+import React, { useState } from "react";
+import { createLinks } from "../api";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -35,9 +35,8 @@ const AddLink = ({ setLinks }) => {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
   const [comment, setComment] = useState("");
-  const [createDate, setCreateDate] = useState("");
+  const [createDate, setCreateDate] = useState();
   const [tags, setTags] = useState([]);
-
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
   const classes = useStyles();
@@ -58,6 +57,7 @@ const AddLink = ({ setLinks }) => {
       comment,
       tags
     );
+
     setLinks((prevLinks) => {
       return [...prevLinks, newLink];
     });
@@ -65,7 +65,7 @@ const AddLink = ({ setLinks }) => {
     setName("");
     setLink("");
     setComment("");
-    setCreateDate("");
+    setCreateDate();
     setTags([]);
   };
 
@@ -76,6 +76,7 @@ const AddLink = ({ setLinks }) => {
           type="text"
           label="name"
           placeholder="name"
+          fullWidth
           value={name}
           onInput={(event) => {
             setName(event.target.value);
@@ -85,6 +86,7 @@ const AddLink = ({ setLinks }) => {
           type="text"
           label="comment"
           placeholder="comment"
+          fullWidth
           value={comment}
           onInput={(event) => {
             setComment(event.target.value);
@@ -94,9 +96,19 @@ const AddLink = ({ setLinks }) => {
           type="url"
           label="url"
           placeholder="url"
+          fullWidth
           value={link}
           onInput={(event) => {
             setLink(event.target.value);
+          }}
+        />
+        <TextField
+          type="text"
+          label="tags"
+          fullWidth
+          value={tags}
+          onInput={(event) => {
+            setTags(event.target.value);
           }}
         />
         <TextField
@@ -105,14 +117,6 @@ const AddLink = ({ setLinks }) => {
           value={createDate}
           onInput={(event) => {
             setCreateDate(event.target.value);
-          }}
-        />
-        <TextField
-          type="text"
-          label="tags"
-          value={tags}
-          onInput={(event) => {
-            setTags(event.target.value);
           }}
         />
         <Button type="submit">Submit</Button>

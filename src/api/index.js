@@ -69,14 +69,14 @@ export async function deleteLink(id) {
   }
 }
 
-export async function patchLink(id, name, link, comment, clickNum, tags ) {
+export async function patchLink(id, name, link, comment, clickNum, tags) {
   try {
     const { data } = await axios.patch(`/api/${id}`, {
       name: name,
       link: link,
       comment: comment,
       clickNum: clickNum,
-      tags: tags
+      tags: tags,
     });
     return data;
   } catch (error) {
@@ -108,10 +108,9 @@ export async function updateFavorite(id, boo) {
 
 export async function getLinksByTag(tagName) {
   try {
-    const { data } = await axios.get(`/api/${tagName}/links`)
-    return data
+    const { data } = await axios.get(`/api/${tagName}/links`);
+    return data;
   } catch (error) {
-    throw error
+    throw error;
   }
 }
-
