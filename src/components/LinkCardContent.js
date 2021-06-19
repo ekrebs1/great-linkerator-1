@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import EditModal from "./EditModal";
 import ShareModal from "./ShareModal";
-import { deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
+import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -62,11 +62,15 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const handleExpandClick = (idx) => {
     setExpandedId(expandedId === idx ? -1 : idx);
   };
-  const handleClick = (id, link, clickNum) => {
-    let newClickNum = (clickNum += 1);
+  const handleClick = async (id, link, clickNum) => {
+    try {
+      let newClickNum = (clickNum += 1);
     setCurrentClickNum(newClickNum);
-    updateClick(id, newClickNum);
-    window.open(link);
+    const updatedLinks = await updateClick(id, newClickNum)
+    // window.open(link);
+    } catch (err) {
+      throw err
+    }
   };
   const handleDelete = (id) => {
     deleteLink(id);
@@ -90,9 +94,7 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const handleClickTag = async (tagName) => {
     if (onTag === false) {
       let linksByTag = await getLinksByTag(tagName);
-      console.log(linksByTag[0], "LINKS BY TAG");
       setLinks(linksByTag[0]);
-      console.log(links, "LIKES AFTER SETTING");
       setOnTag(true);
     }
   };
