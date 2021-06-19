@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core/";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import CreateIcon from "@material-ui/icons/Create";
-import { patchLink } from "../api";
+import { getLinks, patchLink } from "../api";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -33,41 +30,36 @@ const useStyles = makeStyles((theme) => ({
 
 const EditModal = ({ links, link, setLinks }) => {
   const [name, setName] = useState(link.name);
-  const [newLink, setLink] = useState("")
+  const [newLink, setLink] = useState("");
   const [url, setUrl] = useState(link.link);
   const [comment, setComment] = useState(link.comment);
   const [tags, setTags] = useState(link.tags.tags);
-  const [id, setId] = useState(link.id)
-  const [clickNum, setClickNum] = useState(link.clickNum)
+  const [id, setId] = useState(link.id);
+  const [clickNum, setClickNum] = useState(link.clickNum);
 
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(true);
   const classes = useStyles();
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleCreateLink = async (event) => {
+  const handlePatchLink = async (event) => {
     event.preventDefault();
-    await patchLink(
-      id,
-      name,
-      url,
-      comment,
-      clickNum,
-      tags
-    );
-    setLinks(links)
-    handleClose();
+    try {
+      await patchLink(id, name, url, comment, clickNum, tags);
+      let updatedLinks = await getLinks();
+      setLinks(updatedLinks.links);
+      handleClose();
+    } catch (err) {
+      throw err;
+    }
   };
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <form noValidate autoComplete="off" onSubmit={handleCreateLink}>
+      <form noValidate autoComplete="off" onSubmit={handlePatchLink}>
         <TextField
           type="text"
           label="name"
@@ -109,14 +101,14 @@ const EditModal = ({ links, link, setLinks }) => {
   );
 
   return (
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="create-activity-name"
-        aria-describedby="create-activity-description"
-      >
-        {body}
-      </Modal>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="create-activity-name"
+      aria-describedby="create-activity-description"
+    >
+      {body}
+    </Modal>
   );
 };
 
