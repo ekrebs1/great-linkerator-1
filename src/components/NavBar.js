@@ -1,11 +1,9 @@
-import React from "react";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Search from "./Search";
+import Toolbar from "@material-ui/core/Toolbar";
+import React from "react";
 import { Link } from "react-router-dom";
-import fonts from "./fonts.css";
+import Search from "./Search";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -35,15 +33,15 @@ const useStyles = makeStyles((theme) => ({
 const NavBar = ({ tags, links, setLinks, retrieveLinks }) => {
   const classes = useStyles();
   return (
-    <AppBar className={classes.appBar} position='static'>
+    <AppBar className={classes.appBar} position="static">
       <Toolbar className={classes.toolBar}>
-        <Link to='/' className={classes.titles}>
+        <Link to="/" className={classes.titles} onClick={retrieveLinks}>
           Home
         </Link>
         {/* <Link to='/tags' className={classes.titles}>
           Tags
         </Link> */}
-        <Link to='/favorites' className={classes.titles}>
+        <Link to="/favorites" className={classes.titles}>
           Favorites
         </Link>
 

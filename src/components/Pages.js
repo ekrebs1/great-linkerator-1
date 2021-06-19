@@ -1,8 +1,8 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import Tags from "./Tags";
 import Favorites from "./Favorites";
 import Links from "./Links";
+import Tags from "./Tags";
 
 const Pages = ({ links, setLinks, tags, setTags }) => {
   return (

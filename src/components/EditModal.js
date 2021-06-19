@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import { Button, Modal, TextField } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
-import { Modal, Button, TextField } from "@material-ui/core/";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import CreateIcon from "@material-ui/icons/Create";
+import React, { useState } from "react";
 import { patchLink } from "../api";
 
 function rand() {
@@ -33,12 +30,12 @@ const useStyles = makeStyles((theme) => ({
 
 const EditModal = ({ links, link, setLinks }) => {
   const [name, setName] = useState(link.name);
-  const [newLink, setLink] = useState("")
+  const [newLink, setLink] = useState("");
   const [url, setUrl] = useState(link.link);
   const [comment, setComment] = useState(link.comment);
   const [tags, setTags] = useState(link.tags.tags);
-  const [id, setId] = useState(link.id)
-  const [clickNum, setClickNum] = useState(link.clickNum)
+  const [id, setId] = useState(link.id);
+  const [clickNum, setClickNum] = useState(link.clickNum);
 
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(true);
@@ -53,15 +50,8 @@ const EditModal = ({ links, link, setLinks }) => {
 
   const handleCreateLink = async (event) => {
     event.preventDefault();
-    await patchLink(
-      id,
-      name,
-      url,
-      comment,
-      clickNum,
-      tags
-    );
-    setLinks(links)
+    await patchLink(id, name, url, comment, clickNum, tags);
+    setLinks(links);
     handleClose();
   };
 
@@ -109,14 +99,14 @@ const EditModal = ({ links, link, setLinks }) => {
   );
 
   return (
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="create-activity-name"
-        aria-describedby="create-activity-description"
-      >
-        {body}
-      </Modal>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="create-activity-name"
+      aria-describedby="create-activity-description"
+    >
+      {body}
+    </Modal>
   );
 };
 

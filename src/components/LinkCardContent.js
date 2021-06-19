@@ -1,31 +1,24 @@
-import React, { useState } from "react";
-import EditModal from "./EditModal";
-import ShareModal from "./ShareModal";
-import {
-  getLinks,
-  deleteLink,
-  updateClick,
-  updateFavorite,
-  getLinksByTag,
-} from "../api";
-import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import { Chip } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import Collapse from "@material-ui/core/Collapse";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CreateIcon from "@material-ui/icons/Create";
-import { Chip } from "@material-ui/core";
-import { TramRounded } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import CreateIcon from "@material-ui/icons/Create";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import clsx from "clsx";
+import React, { useState } from "react";
+import { deleteLink, getLinksByTag, updateClick, updateFavorite } from "../api";
+import EditModal from "./EditModal";
+import ShareModal from "./ShareModal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,9 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const classes = useStyles();
-  const [currentClickNum, setCurrentClickNum] = useState(
-    link.clickNum ? link.clickNum : 0
-  );
+  const [clickNum, setClickNum] = useState(link.clickNum);
   const [onTag, setOnTag] = useState(false);
   const [expandedId, setExpandedId] = useState(-1);
   const [isFavorite, setIsFavorite] = useState(link.favorite);
@@ -71,9 +62,10 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   };
   const handleClick = (id, link, clickNum) => {
     let newClickNum = (clickNum += 1);
-    setCurrentClickNum(newClickNum);
     updateClick(id, newClickNum);
+    setClickNum(newClickNum);
     window.open(link);
+    window.location.reload();
   };
   const handleDelete = (id) => {
     deleteLink(id);
@@ -107,34 +99,36 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   return (
     link.active && (
       <>
-        <Card key={link.id} direction='row' className={classes.root}>
+        <Card key={link.id} direction="row" className={classes.root}>
           <CardHeader
             avatar={
               <Avatar
-                aria-label='recipe'
+                aria-label="recipe"
                 style={{ cursor: "pointer" }}
                 className={classes.avatar}
                 onClick={() => {
-                  handleClick(link.id, link.link, currentClickNum);
-                }}>
-                <span role='img' aria-label='link emoji'>
+                  handleClick(link.id, link.link, clickNum);
+                }}
+              >
+                <span role="img" aria-label="link emoji">
                   🔗
                 </span>
               </Avatar>
             }
             action={
               <>
-                <Tooltip title='Delete link'>
+                <Tooltip title="Delete link">
                   <IconButton
-                    aria-label='delete link'
+                    aria-label="delete link"
                     onClick={() => {
                       handleDelete(link.id);
-                    }}>
+                    }}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title='Edit link'>
-                  <IconButton aria-label='edit link' onClick={handleEditPost}>
+                <Tooltip title="Edit link">
+                  <IconButton aria-label="edit link" onClick={handleEditPost}>
                     <CreateIcon />
                     {editState && <EditModal link={link} setLinks={setLinks} />}
                   </IconButton>
@@ -146,20 +140,20 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
           />
           <CardMedia
             className={classes.media}
-            image='img'
-            title='link preview'
+            image="img"
+            title="link preview"
           />
           <CardContent>
-            <Typography variant='body2' color='textSecondary' component='p'>
-              Click count: {currentClickNum}
+            <Typography variant="body2" color="textSecondary" component="p">
+              Click count: {link.clickNum}
             </Typography>
-            <Typography variant='body1' color='textSecondary' component='p'>
+            <Typography variant="body1" color="textSecondary" component="p">
               {link.comment}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <Tooltip title='Favorite'>
-              <IconButton aria-label='add to favorites'>
+            <Tooltip title="Favorite">
+              <IconButton aria-label="add to favorites">
                 <FavoriteIcon
                   style={favIconColor}
                   onClick={() => {
@@ -173,35 +167,36 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Share'>
-              <IconButton aria-label='share'>
+            <Tooltip title="Share">
+              <IconButton aria-label="share">
                 <ShareModal link={link} />
               </IconButton>
             </Tooltip>
-            <Tooltip title='Expand tags'>
+            <Tooltip title="Expand tags">
               <IconButton
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expandedId,
                 })}
                 onClick={() => handleExpandClick(idx)}
                 aria-expanded={expandedId === idx}
-                aria-label='show more'>
+                aria-label="show more"
+              >
                 <ExpandMoreIcon />
               </IconButton>
             </Tooltip>
           </CardActions>
-          <Collapse in={expandedId === idx} timeout='auto' unmountOnExit>
+          <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography paragraph>Tags:</Typography>
-              <Typography variant='body2' color='textSecondary' component='p'>
+              <Typography variant="body2" color="textSecondary" component="p">
                 {link.tags[0]
                   ? link.tags.map((tags, idx) => {
                       return (
-                        <div className='tags' key={idx}>
+                        <div className="tags" key={idx}>
                           <Chip
-                            color='primary'
-                            size='small'
-                            variant='outlined'
+                            color="primary"
+                            size="small"
+                            variant="outlined"
                             className={classes.chip}
                             key={tags.id}
                             label={tags.name}
