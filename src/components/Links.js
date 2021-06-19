@@ -15,9 +15,12 @@ const useStyles = makeStyles((theme) => ({
   linkContainer: {
     paddingTop: theme.spacing(3),
   },
+  linkGrid: {
+    paddingTop: theme.spacing(3),
+  },
   linkTitle: {
     fontWeight: "800",
-    paddingBottom: theme.spacing(3),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -32,7 +35,11 @@ const Links = ({ links, setLinks, tags, setTags }) => {
         </Typography>
         <Dropdown links={links} setLinks={setLinks} />
 
-        <Grid container direction='row' justify='space-between'>
+        <Grid
+          container
+          className={classes.linkGrid}
+          direction='row'
+          justify='space-between'>
           <LinkCard
             tags={tags}
             setTags={setTags}
