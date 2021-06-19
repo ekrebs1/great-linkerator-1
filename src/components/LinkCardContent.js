@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: "#557a95",
+    "&:hover": {
+      transform: "scale(1.1, 1.1)",
+      backgroundColor: "#0f3e61",
+    },
   },
 }));
 const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
@@ -103,36 +107,34 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   return (
     link.active && (
       <>
-        <Card key={link.id} direction="row" className={classes.root}>
+        <Card key={link.id} direction='row' className={classes.root}>
           <CardHeader
             avatar={
               <Avatar
-                aria-label="recipe"
+                aria-label='recipe'
                 style={{ cursor: "pointer" }}
                 className={classes.avatar}
                 onClick={() => {
                   handleClick(link.id, link.link, currentClickNum);
-                }}
-              >
-                <span role="img" aria-label="link emoji">
+                }}>
+                <span role='img' aria-label='link emoji'>
                   🔗
                 </span>
               </Avatar>
             }
             action={
               <>
-                <Tooltip title="Delete link">
+                <Tooltip title='Delete link'>
                   <IconButton
-                    aria-label="delete link"
+                    aria-label='delete link'
                     onClick={() => {
                       handleDelete(link.id);
-                    }}
-                  >
+                    }}>
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="Edit link">
-                  <IconButton aria-label="edit link" onClick={handleEditPost}>
+                <Tooltip title='Edit link'>
+                  <IconButton aria-label='edit link' onClick={handleEditPost}>
                     <CreateIcon />
                     {editState && <EditModal link={link} setLinks={setLinks} />}
                   </IconButton>
@@ -144,20 +146,20 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
           />
           <CardMedia
             className={classes.media}
-            image="img"
-            title="link preview"
+            image='img'
+            title='link preview'
           />
           <CardContent>
-            <Typography variant="body2" color="textSecondary" component="p">
+            <Typography variant='body2' color='textSecondary' component='p'>
               Click count: {currentClickNum}
             </Typography>
-            <Typography variant="body1" color="textSecondary" component="p">
+            <Typography variant='body1' color='textSecondary' component='p'>
               {link.comment}
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <Tooltip title="Favorite">
-              <IconButton aria-label="add to favorites">
+            <Tooltip title='Favorite'>
+              <IconButton aria-label='add to favorites'>
                 <FavoriteIcon
                   style={favIconColor}
                   onClick={() => {
@@ -171,36 +173,35 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
                 />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Share">
-              <IconButton aria-label="share">
+            <Tooltip title='Share'>
+              <IconButton aria-label='share'>
                 <ShareModal link={link} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Expand tags">
+            <Tooltip title='Expand tags'>
               <IconButton
                 className={clsx(classes.expand, {
                   [classes.expandOpen]: expandedId,
                 })}
                 onClick={() => handleExpandClick(idx)}
                 aria-expanded={expandedId === idx}
-                aria-label="show more"
-              >
+                aria-label='show more'>
                 <ExpandMoreIcon />
               </IconButton>
             </Tooltip>
           </CardActions>
-          <Collapse in={expandedId === idx} timeout="auto" unmountOnExit>
+          <Collapse in={expandedId === idx} timeout='auto' unmountOnExit>
             <CardContent>
               <Typography paragraph>Tags:</Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
+              <Typography variant='body2' color='textSecondary' component='p'>
                 {link.tags[0]
                   ? link.tags.map((tags, idx) => {
                       return (
-                        <div className="tags" key={idx}>
+                        <div className='tags' key={idx}>
                           <Chip
-                            color="primary"
-                            size="small"
-                            variant="outlined"
+                            color='primary'
+                            size='small'
+                            variant='outlined'
                             className={classes.chip}
                             key={tags.id}
                             label={tags.name}
