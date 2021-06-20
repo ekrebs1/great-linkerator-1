@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import EditModal from "./EditModal";
 import ShareModal from "./ShareModal";
-import { getLinks, deleteLink, updateClick, updateFavorite, getLinksByTag } from "../api";
+import {
+  deleteLink,
+  updateClick,
+  updateFavorite,
+  getLinksByTag,
+} from "../api";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Card from "@material-ui/core/Card";
@@ -65,38 +70,55 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
   const handleClick = async (id, link, clickNum) => {
     try {
       let newClickNum = (clickNum += 1);
-    setCurrentClickNum(newClickNum);
-    const updatedLinks = await updateClick(id, newClickNum)
-    // window.open(link);
+      setCurrentClickNum(newClickNum);
+      updateClick(id, newClickNum);
+      window.open(link);
     } catch (err) {
-      throw err
+      throw err;
     }
   };
-  const handleDelete = (id) => {
-    deleteLink(id);
-    const activeLinks = links.filter((fLink) => fLink.id !== link.id);
-    setLinks(activeLinks);
+  const handleDelete = async (id) => {
+    try {
+      await deleteLink(id);
+      const activeLinks = links.filter((fLink) => fLink.id !== link.id);
+      setLinks(activeLinks);
+    } catch (err) {
+      throw err;
+    }
   };
-  const handleFavorite = (id, boo) => {
-    updateFavorite(id, boo);
-    setIsFavorite(true);
-    setFavIconColor({ color: "#cd5f66" });
+  const handleFavorite = async (id, boo) => {
+    try {
+      await updateFavorite(id, boo);
+      setIsFavorite(true);
+      setFavIconColor({ color: "#cd5f66" });
+    } catch (err) {
+      throw err;
+    }
   };
-  const handleUnfavorite = (id, boo) => {
-    updateFavorite(id, boo);
-    setIsFavorite(false);
-    setFavIconColor({ color: "grey" });
+  const handleUnfavorite = async (id, boo) => {
+    try {
+      await updateFavorite(id, boo);
+      setIsFavorite(false);
+      setFavIconColor({ color: "grey" });
+    } catch (err) {
+      throw err;
+    }
   };
   const handleEditPost = () => {
     setEditState(true);
   };
 
   const handleClickTag = async (tagName) => {
-    if (onTag === false) {
+    try {
+          if (onTag === false) {
       let linksByTag = await getLinksByTag(tagName);
       setLinks(linksByTag[0]);
       setOnTag(true);
     }
+    } catch (err) {
+      throw err
+    }
+
   };
 
   return (
