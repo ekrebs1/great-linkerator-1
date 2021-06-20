@@ -82,6 +82,7 @@ export async function patchLink(id, name, link, comment, clickNum, tags) {
   } catch (error) {
     throw error;
   }
+
 }
 
 export async function updateClick(id, newClickNum) {

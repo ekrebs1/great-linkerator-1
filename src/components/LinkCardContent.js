@@ -67,33 +67,48 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
     window.open(link);
     window.location.reload();
   };
-  const handleDelete = (id) => {
-    deleteLink(id);
-    const activeLinks = links.filter((fLink) => fLink.id !== link.id);
-    setLinks(activeLinks);
+  const handleDelete = async (id) => {
+    try {
+      await deleteLink(id);
+      const activeLinks = links.filter((fLink) => fLink.id !== link.id);
+      setLinks(activeLinks);
+    } catch (err) {
+      throw err;
+    }
   };
-  const handleFavorite = (id, boo) => {
-    updateFavorite(id, boo);
-    setIsFavorite(true);
-    setFavIconColor({ color: "#cd5f66" });
+  const handleFavorite = async (id, boo) => {
+    try {
+      await updateFavorite(id, boo);
+      setIsFavorite(true);
+      setFavIconColor({ color: "#cd5f66" });
+    } catch (err) {
+      throw err;
+    }
   };
-  const handleUnfavorite = (id, boo) => {
-    updateFavorite(id, boo);
-    setIsFavorite(false);
-    setFavIconColor({ color: "grey" });
+  const handleUnfavorite = async (id, boo) => {
+    try {
+      await updateFavorite(id, boo);
+      setIsFavorite(false);
+      setFavIconColor({ color: "grey" });
+    } catch (err) {
+      throw err;
+    }
   };
   const handleEditPost = () => {
     setEditState(true);
   };
 
   const handleClickTag = async (tagName) => {
-    if (onTag === false) {
+    try {
+          if (onTag === false) {
       let linksByTag = await getLinksByTag(tagName);
-      console.log(linksByTag[0], "LINKS BY TAG");
       setLinks(linksByTag[0]);
-      console.log(links, "LIKES AFTER SETTING");
       setOnTag(true);
     }
+    } catch (err) {
+      throw err
+    }
+
   };
 
   return (

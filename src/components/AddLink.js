@@ -74,7 +74,7 @@ const AddLink = ({ setLinks }) => {
       <form noValidate autoComplete="off" onSubmit={handleCreateLink}>
         <TextField
           type="text"
-          label="name"
+          label="name*"
           placeholder="name"
           fullWidth
           value={name}
@@ -84,7 +84,7 @@ const AddLink = ({ setLinks }) => {
         />
         <TextField
           type="text"
-          label="comment"
+          label="comment*"
           placeholder="comment"
           fullWidth
           value={comment}
@@ -94,7 +94,7 @@ const AddLink = ({ setLinks }) => {
         />
         <TextField
           type="url"
-          label="url"
+          label="url*"
           placeholder="url"
           fullWidth
           value={link}
@@ -104,8 +104,7 @@ const AddLink = ({ setLinks }) => {
         />
         <TextField
           type="text"
-          label="tags"
-          fullWidth
+          label="tags*"
           value={tags}
           onInput={(event) => {
             setTags(event.target.value);
@@ -121,6 +120,7 @@ const AddLink = ({ setLinks }) => {
         />
         <Button type="submit">Submit</Button>
       </form>
+      <p style={{color: "red", paddingTop:"5px"}}>*required fields</p>
     </div>
   );
 

@@ -27,7 +27,7 @@ const ShareModal = ({ link }) => {
           console.log("Thanks for sharing!");
         })
         .catch((err) => {
-          console.log(`Couldn't share because of`, err.message);
+          console.error(`Couldn't share because of`, err.message);
         });
     } else {
       setAnchorEl(event.currentTarget);

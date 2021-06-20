@@ -29,7 +29,8 @@ const Dropdown = ({ links, setLinks }) => {
       <FormControl className={classes.formControl}>
         <InputLabel>Sort by...</InputLabel>
         <Select onChange={handleSortClicks}>
-          <MenuItem value="Click Count">Click Count</MenuItem>
+          <MenuItem value={handleSortClicks}>Click Count</MenuItem>
+
         </Select>
       </FormControl>
     </>
