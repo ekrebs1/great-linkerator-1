@@ -38,9 +38,6 @@ const NavBar = ({ tags, links, setLinks, retrieveLinks }) => {
         <Link to="/" className={classes.titles} onClick={retrieveLinks}>
           Home
         </Link>
-        {/* <Link to='/tags' className={classes.titles}>
-          Tags
-        </Link> */}
         <Link to="/favorites" className={classes.titles}>
           Favorites
         </Link>

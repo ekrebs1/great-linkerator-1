@@ -166,17 +166,19 @@ const LinkCardContent = ({ link, idx, tags, setLinks, links }) => {
           </CardContent>
           <CardActions disableSpacing>
             <Tooltip title='Favorite'>
-              <IconButton aria-label='add to favorites'>
+              <IconButton 
+                aria-label='add to favorites'
+                onClick={() => {
+                  if (isFavorite === false) {
+                    handleFavorite(link.id, true);
+                  }
+                  if (isFavorite === true) {
+                    handleUnfavorite(link.id, false);
+                  }
+                }}
+                >
                 <FavoriteIcon
                   style={favIconColor}
-                  onClick={() => {
-                    if (isFavorite === false) {
-                      handleFavorite(link.id, true);
-                    }
-                    if (isFavorite === true) {
-                      handleUnfavorite(link.id, false);
-                    }
-                  }}
                 />
               </IconButton>
             </Tooltip>
