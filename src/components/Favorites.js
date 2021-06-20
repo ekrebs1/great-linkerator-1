@@ -33,6 +33,7 @@ const Favorites = ({ links, tags, setLinks }) => {
               return (
                 <Grid
                   container
+                  key={idx}
                   className={classes.linkGrid}
                   direction="row"
                   justify="space-between"

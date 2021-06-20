@@ -60,11 +60,9 @@ const Search = ({ links, setLinks, reset, tags }) => {
   const handleOnChange = (event) => {
     const keywords = event.target.value;
     setSearchQuery(keywords);
-    console.log(searchQuery);
   };
 
   const handleReset = (event) => {
-    console.log("reset");
     reset();
   };
 
@@ -77,13 +75,13 @@ const Search = ({ links, setLinks, reset, tags }) => {
         value={searchQuery}
       />
       <Tooltip title="Search">
-        <IconButton aria-label="search">
-          <SearchIcon onClick={handleSearchSubmit} />
+        <IconButton aria-label="search" onClick={handleSearchSubmit}>
+          <SearchIcon />
         </IconButton>
       </Tooltip>
       <Tooltip title="Reset">
-        <IconButton aria-label="reset">
-          <UndoIcon onClick={handleReset} />
+        <IconButton aria-label="reset" onClick={handleReset}>
+          <UndoIcon />
         </IconButton>
       </Tooltip>
     </div>
