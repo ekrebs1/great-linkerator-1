@@ -49,24 +49,27 @@ const AddLink = ({ setLinks }) => {
   };
 
   const handleCreateLink = async (event) => {
-    event.preventDefault();
-    const { newLink } = await createLinks(
-      name,
-      link,
-      createDate,
-      comment,
-      tags
-    );
-
-    setLinks((prevLinks) => {
-      return [...prevLinks, newLink];
-    });
-    handleClose();
-    setName("");
-    setLink("");
-    setComment("");
-    setCreateDate();
-    setTags([]);
+    try {
+      event.preventDefault();
+      const { newLink } = await createLinks(
+        name,
+        link,
+        createDate,
+        comment,
+        tags
+      );
+      setLinks((prevLinks) => {
+        return [...prevLinks, newLink];
+      });
+      handleClose();
+      setName("");
+      setLink("");
+      setComment("");
+      setCreateDate();
+      setTags([]);
+    } catch (err) {
+      throw err;
+    }
   };
 
   const body = (
