@@ -1,20 +1,10 @@
-import React, { useState, useEffect } from "react";
-import TextField from "@material-ui/core/TextField";
-import {
-  fade,
-  ThemeProvider,
-  withStyles,
-  makeStyles,
-  createMuiTheme,
-} from "@material-ui/core/styles";
-import InputBase from "@material-ui/core/InputBase";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import { green } from "@material-ui/core/colors";
-import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
+import InputBase from "@material-ui/core/InputBase";
+import { fade, withStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import SearchIcon from "@material-ui/icons/Search";
 import UndoIcon from "@material-ui/icons/Undo";
-import Tooltip from '@material-ui/core/Tooltip';
+import React, { useState } from "react";
 
 const BootstrapInput = withStyles((theme) => ({
   root: {
@@ -64,7 +54,7 @@ const Search = ({ links, setLinks, reset, tags }) => {
         : "";
     });
     setLinks(filteredLinks);
-    setSearchQuery("")
+    setSearchQuery("");
   };
 
   const handleOnChange = (event) => {
@@ -81,20 +71,20 @@ const Search = ({ links, setLinks, reset, tags }) => {
   return (
     <div>
       <BootstrapInput
-        placeholder='Search...'
-        id='bootstrap-input'
+        placeholder="Search..."
+        id="bootstrap-input"
         onChange={handleOnChange}
         value={searchQuery}
       />
       <Tooltip title="Search">
-        <IconButton aria-label='search'>
+        <IconButton aria-label="search">
           <SearchIcon onClick={handleSearchSubmit} />
         </IconButton>
       </Tooltip>
       <Tooltip title="Reset">
-      <IconButton aria-label='reset'>
-        <UndoIcon onClick={handleReset} />
-      </IconButton>
+        <IconButton aria-label="reset">
+          <UndoIcon onClick={handleReset} />
+        </IconButton>
       </Tooltip>
     </div>
   );
