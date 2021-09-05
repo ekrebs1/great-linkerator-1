@@ -65,7 +65,7 @@ Build database
 Start Server
 
 ```sh
-  server:dev
+  npm run server:dev
 ```
 
 Open localhost:3000
