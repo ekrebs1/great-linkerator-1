@@ -47,7 +47,7 @@ Clone the project
 Go to the project directory
 
 ```sh
-  cd great-linkerator
+  cd great-linkerator-1
 ```
 
 Install dependencies
